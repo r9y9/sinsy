@@ -1,0 +1,14 @@
+The Sinsy is an HMM-Based singing voice synthesis system. This software is
+released under the Modified BSD license. See the COPYING file in the same
+directory as this file for the license.
+
+The Sinsy has been developed by several members of Sinsy working group and some
+graduate students in Nagoya Institute of Technology:
+
+ Keiichi Tokuda      http://www.sp.nitech.ac.jp/~tokuda/
+ (Produce and Design)
+ Keiichiro Oura      http://www.sp.nitech.ac.jp/~uratec/
+ (Design and Development)
+ Kazuhiro Nakamura   http://www.sp.nitech.ac.jp/~nkazu/
+ (Development and Main Maintainer)
+ Yoshihiko Nankaku   http://www.sp.nitech.ac.jp/~nankaku/
