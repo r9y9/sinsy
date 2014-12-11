@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -45,6 +45,13 @@
 
 namespace sinsy
 {
+/*!
+ get measure duration
+ */
+size_t getMeasureDuration(const Beat& beat)
+{
+   return BASE_DIVISIONS * 4 * beat.getBeats() / beat.getBeatType();
+}
 
 /*!
  write score

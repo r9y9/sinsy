@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -43,6 +43,7 @@
 #include <exception>
 #include <stdexcept>
 #include "util_log.h"
+#include "util_converter.h"
 #include "UnknownConf.h"
 #include "IConvertable.h"
 
@@ -51,9 +52,8 @@ using namespace sinsy;
 namespace
 {
 const std::string SIL_STR = "sil";
-const char DISABLE_CHAR = '#';
-const char FALSETTO_CHAR = '$';
 const std::string LANGUAGE_INFO = "";
+const std::string UNKNOWN_PHONEME = "xx";
 };
 
 /*!
@@ -93,33 +93,13 @@ bool UnknownConf::convert(const std::string& enc, ConvertableList::iterator begi
       if (!convertable.isConverted()) {
          std::string lyric(convertable.getLyric());
 
-         bool enableFlag = true;
-         bool falsettoFlag = false;
-
-         // check disable char
-         for (size_t idx(0); ; ) {
-            idx = lyric.find(DISABLE_CHAR, idx);
-            if (std::string::npos == idx) {
-               break;
-            }
-            lyric.erase(idx, idx + 1);
-            enableFlag = false;
-         }
-
-         // check falsetto char
-         for (size_t idx(0); ; ) {
-            idx = lyric.find(FALSETTO_CHAR, idx);
-            if (std::string::npos == idx) {
-               break;
-            }
-            lyric.erase(idx, idx + 1);
-            falsettoFlag = true;
-         }
-         if (enableFlag) {
+         ScoreFlag flag(analyzeScoreFlags(lyric));
+         if (isEnableFlag(flag)) {
             WARN_MSG("Lyric in unknown language : " << convertable.getLyric());
          }
+
          std::vector<PhonemeInfo> phonemes;
-         phonemes.push_back(PhonemeInfo("", lyric, enableFlag, falsettoFlag));
+         phonemes.push_back(PhonemeInfo("", UNKNOWN_PHONEME, flag));
          convertable.addInfo(phonemes, LANGUAGE_INFO, "");
       }
    }

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -43,6 +43,7 @@
 #define SINSY_PHONEME_INFO_H_
 
 #include <string>
+#include "util_converter.h"
 
 namespace sinsy
 {
@@ -60,7 +61,7 @@ public:
    PhonemeInfo();
 
    //! constructor
-   PhonemeInfo(const std::string& type, const std::string& phoneme, bool e = true, bool f = false);
+   PhonemeInfo(const std::string& type, const std::string& phoneme, ScoreFlag flag = 0);
 
    //! copy constructor
    PhonemeInfo(const PhonemeInfo& obj);
@@ -77,11 +78,7 @@ public:
    //! get phoneme
    const std::string& getPhoneme() const;
 
-   //! return which enable or not
-   bool isEnable() const;
-
-   //! return which falsetto or not
-   bool isFalsetto() const;
+   ScoreFlag getScoreFlag() const;
 
 private:
    //! type (TYPE_SILENT, TYPE_PAUSE, ..., or TYPE_BREAK)
@@ -90,11 +87,7 @@ private:
    //! phoneme
    std::string phoneme;
 
-   //! flag of helpful or not for training
-   bool enableFlag;
-
-   //! flag of falsetto
-   bool falsettoFlag;
+   ScoreFlag scoreFlag;
 };
 
 };

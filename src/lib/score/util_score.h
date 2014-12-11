@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -42,10 +42,18 @@
 #ifndef SINSY_UTIL_SCORE_H_
 #define SINSY_UTIL_SCORE_H_
 
+#include <cstddef>
+
 namespace sinsy
 {
 class IScoreWriter;
 class IScoreWritable;
+class Beat;
+
+const size_t BASE_DIVISIONS = 960;
+
+//! get measure duration
+size_t getMeasureDuration(const Beat& beat);
 
 //! write score
 IScoreWritable& operator<<(IScoreWritable& writable, const IScoreWriter& writer);

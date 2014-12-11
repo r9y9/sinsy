@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -43,14 +43,9 @@
 #include "PhonemeTable.h"
 #include "StringTokenizer.h"
 #include "util_log.h"
+#include "util_string.h"
 
 using namespace sinsy;
-
-namespace
-{
-const std::string NULL_STR = "";
-const std::string SPACE_STR = " \t\r\n";
-};
 
 /*!
  constructor
@@ -170,7 +165,7 @@ bool PhonemeTable::read(const std::string& fname)
 
    while (!ifs.eof()) {
       std::getline(ifs, buffer);
-      StringTokenizer st(buffer, SPACE_STR);
+      StringTokenizer st(buffer, BLANK_STR);
 
       size_t sz(st.size());
       if (0 == sz) {

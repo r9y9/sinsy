@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -87,6 +87,13 @@ const SyllabicType SYLLABICTYPE_END    = 3;
 typedef size_t ModeType;
 const ModeType MODETYPE_MAJOR = 0;
 const ModeType MODETYPE_MINOR = 1;
+
+typedef size_t ClefType;
+const ClefType CLEFTYPE_DEFAULT = 0;
+const ClefType CLEFTYPE_G = 1;
+const ClefType CLEFTYPE_F = 2;
+const ClefType CLEFTYPE_C = 3;
+
 
 class SynthConditionImpl;
 class SinsyImpl;
@@ -229,7 +236,7 @@ public:
    bool loadScoreFromMusicXML(const std::string& xml);
 
    //! save score to MusicXML
-   bool saveScoreToMusicXML(const std::string& xml);
+   bool saveScoreToMusicXML(const std::string& xml, ClefType clefType = CLEFTYPE_DEFAULT);
 
 private:
    //! copy constructor (donot use)

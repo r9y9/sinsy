@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -517,11 +517,17 @@ public:
    }
 
    //! save score to MusicXML
-   bool saveScoreToMusicXML(const std::string& xml) {
+   bool saveScoreToMusicXML(const std::string& xml, XmlWriter::Clef clef) {
       XmlWriter xmlWriter;
+      xmlWriter.setClef(clef);
       xmlWriter << score;
 
       OutputFile outputFile(xml);
+      if(!outputFile.isValid()) {
+         ERR_MSG("Cannot open Xml file");
+         return false;
+      }
+
       WritableStrStream stream(outputFile);
       if (!xmlWriter.writeXml(stream)) {
          ERR_MSG("Cannot write Xml file");
@@ -625,10 +631,6 @@ bool Sinsy::addBeatMark(size_t beats, size_t beatType)
    }
    if (0 == beatType) {
       ERR_MSG("Wrong beat type (== 0) in API " << FUNC_NAME(beats << ", " << beatType));
-      return false;
-   }
-   if (beatType < beats) {
-      ERR_MSG("Wrong beats or beat type (beatType < beats) in API " << FUNC_NAME(beats << ", " << beatType));
       return false;
    }
    try {
@@ -961,6 +963,10 @@ bool Sinsy::loadScoreFromMusicXML(const std::string& xml)
 {
    try {
       InputFile xmlFile(xml);
+      if(!xmlFile.isValid()) {
+         ERR_MSG("Cannot open Xml file");
+         return false;
+      }
       if (!impl->loadScoreFromMusicXML(xmlFile)) {
          return false;
       }
@@ -974,10 +980,29 @@ bool Sinsy::loadScoreFromMusicXML(const std::string& xml)
 /*!
  save score to MusicXML
  */
-bool Sinsy::saveScoreToMusicXML(const std::string& xml)
+bool Sinsy::saveScoreToMusicXML(const std::string& xml, ClefType clefType)
 {
    try {
-      if (!impl->saveScoreToMusicXML(xml)) {
+      XmlWriter::Clef clef(XmlWriter::CLEF_DEFAULT);
+      switch (clefType) {
+      case CLEFTYPE_DEFAULT :
+         clef = XmlWriter::CLEF_DEFAULT;
+         break;
+      case CLEFTYPE_G :
+         clef = XmlWriter::CLEF_G;
+         break;
+      case CLEFTYPE_F :
+         clef = XmlWriter::CLEF_F;
+         break;
+      case CLEFTYPE_C :
+         clef = XmlWriter::CLEF_C;
+         break;
+      default :
+         ERR_MSG("Error in API " << FUNC_NAME("") << " : unknown clef type : " << clefType);
+         break;
+      }
+
+      if (!impl->saveScoreToMusicXML(xml, clef)) {
          return false;
       }
    } catch (const std::exception& ex) {

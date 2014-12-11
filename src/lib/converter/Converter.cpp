@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -46,14 +46,13 @@
 #include "IConvertable.h"
 #include "ConfGroup.h"
 #include "util_log.h"
+#include "util_converter.h"
 #include "Deleter.h"
 
 using namespace sinsy;
 
 namespace
 {
-const std::string SIL_STR("sil");
-const std::string PAU_STR("pau");
 
 /*!
  convert resets
@@ -74,13 +73,13 @@ void convertRests(IConf::ConvertableList::iterator begin, IConf::ConvertableList
 
          if (begin != itr) { // not head
             if (!(*(itr - 1))->isRest()) { // prev note is not rest
-               restStr = PAU_STR;
+               restStr = DEFAULT_PAU_STR;
                restType = PhonemeInfo::TYPE_PAUSE;
             }
          }
          if (end - 1 != itr) { // not tail
             if (!(*(itr + 1))->isRest()) { // prev note is not rest
-               restStr = PAU_STR;
+               restStr = DEFAULT_PAU_STR;
                restType = PhonemeInfo::TYPE_PAUSE;
             }
          }
@@ -130,7 +129,7 @@ std::string Converter::getSilStr() const
    if (!confs.empty()) {
       return confs.front()->getSilStr();
    }
-   return SIL_STR;
+   return DEFAULT_SIL_STR;
 }
 
 /*!

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -41,6 +41,7 @@
 
 #include "LabelMeasure.h"
 #include "util_log.h"
+#include "util_score.h"
 #include "ScorePosition.h"
 
 using namespace sinsy;
@@ -96,7 +97,7 @@ const LabelPosition& LabelMeasure::getMaxPosition() const
 /*!
  get duration
  */
-const INT64 LabelMeasure::getDuration() const
+const sinsy::INT64 LabelMeasure::getDuration() const
 {
    return BASE_DIVISIONS * 4 * beat.getBeats() / beat.getBeatType();
 }

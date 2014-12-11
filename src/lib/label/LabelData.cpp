@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -218,17 +218,51 @@ std::ostream& sinsy::operator<<(std::ostream& os, const LabelData& obj)
    if (obj.outputTimeFlag) {
       os << obj.beginTime << " " << obj.endTime << " ";
    }
-   LabelData::List& p = *(obj.data.find('p')->second);
-   LabelData::List& a = *(obj.data.find('a')->second);
-   LabelData::List& b = *(obj.data.find('b')->second);
-   LabelData::List& c = *(obj.data.find('c')->second);
-   LabelData::List& d = *(obj.data.find('d')->second);
-   LabelData::List& e = *(obj.data.find('e')->second);
-   LabelData::List& f = *(obj.data.find('f')->second);
-   LabelData::List& g = *(obj.data.find('g')->second);
-   LabelData::List& h = *(obj.data.find('h')->second);
-   LabelData::List& i = *(obj.data.find('i')->second);
-   LabelData::List& j = *(obj.data.find('j')->second);
+
+   LabelData::Data::const_iterator itrP(obj.data.find('p'));
+   if (obj.data.end() == itrP)
+      throw std::runtime_error("LabelData::operator<<() p is not found");
+   LabelData::List& p = *(itrP->second);
+   LabelData::Data::const_iterator itrA(obj.data.find('a'));
+   if (obj.data.end() == itrA)
+      throw std::runtime_error("LabelData::operator<<() a is not found");
+   LabelData::List& a = *(itrA->second);
+   LabelData::Data::const_iterator itrB(obj.data.find('b'));
+   if (obj.data.end() == itrB)
+      throw std::runtime_error("LabelData::operator<<() b is not found");
+   LabelData::List& b = *(itrB->second);
+   LabelData::Data::const_iterator itrC(obj.data.find('c'));
+   if (obj.data.end() == itrC)
+      throw std::runtime_error("LabelData::operator<<() c is not found");
+   LabelData::List& c = *(itrC->second);
+   LabelData::Data::const_iterator itrD(obj.data.find('d'));
+   if (obj.data.end() == itrD)
+      throw std::runtime_error("LabelData::operator<<() d is not found");
+   LabelData::List& d = *(itrD->second);
+   LabelData::Data::const_iterator itrE(obj.data.find('e'));
+   if (obj.data.end() == itrE)
+      throw std::runtime_error("LabelData::operator<<() e is not found");
+   LabelData::List& e = *(itrE->second);
+   LabelData::Data::const_iterator itrF(obj.data.find('f'));
+   if (obj.data.end() == itrF)
+      throw std::runtime_error("LabelData::operator<<() f is not found");
+   LabelData::List& f = *(itrF->second);
+   LabelData::Data::const_iterator itrG(obj.data.find('g'));
+   if (obj.data.end() == itrG)
+      throw std::runtime_error("LabelData::operator<<() g is not found");
+   LabelData::List& g = *(itrG->second);
+   LabelData::Data::const_iterator itrH(obj.data.find('h'));
+   if (obj.data.end() == itrH)
+      throw std::runtime_error("LabelData::operator<<() h is not found");
+   LabelData::List& h = *(itrH->second);
+   LabelData::Data::const_iterator itrI(obj.data.find('i'));
+   if (obj.data.end() == itrI)
+      throw std::runtime_error("LabelData::operator<<() i is not found");
+   LabelData::List& i = *(itrI->second);
+   LabelData::Data::const_iterator itrJ(obj.data.find('j'));
+   if (obj.data.end() == itrJ)
+      throw std::runtime_error("LabelData::operator<<() j is not found");
+   LabelData::List& j = *(itrJ->second);
 
    if (obj.monophoneFlag) {
       os << p[3];

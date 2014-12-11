@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -69,14 +69,14 @@ namespace
 const size_t STEP_NUM = 12;
 const std::string STEPS[STEP_NUM] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
 
-class Comp
+class CompPitch
 {
 public:
    //! constructor
-   Comp(const std::string& str) : target(str) {}
+   CompPitch(const std::string& str) : target(str) {}
 
    //! destructor
-   virtual ~Comp() {}
+   virtual ~CompPitch() {}
 
    //! ...
    bool operator()(const std::string& str) const {
@@ -182,7 +182,7 @@ void Pitch::set(const std::string& s, Pitch::Octave o, int alter)
 {
    std::string str(s);
    toUpper(str);
-   const std::string* itr(std::find_if(STEPS, STEPS + STEP_NUM, Comp(str)));
+   const std::string* itr(std::find_if(STEPS, STEPS + STEP_NUM, CompPitch(str)));
    if (itr < STEPS + STEP_NUM) {
       set(itr - STEPS, o, alter);
       return;

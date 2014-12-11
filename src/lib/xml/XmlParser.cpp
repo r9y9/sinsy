@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -206,64 +206,70 @@ XmlData* XmlParser::read(IReadableStream& stream, std::string& encoding) throw (
    std::string data;
    std::string tag;
 
-   for ( ; ; ) {
-      getNextTag(stream, data, tag);
+   try {
+      for ( ; ; ) {
+         getNextTag(stream, data, tag);
 
-      if ('/' == tag[0]) { // end tag
-         tag.erase(0, 1);
-         cutBlanks(tag);
-         if (tag.empty()) {
-            throw StreamException("end tag is empty : </ >");
-         }
-         if (dataStack.empty()) {
-            throw StreamException("start tag is needed before end tag");
-         }
-         XmlData* xd(dataStack.top());
-         if (0 != tag.compare(xd->getTag())) {
-            throw StreamException("start tag and end tag are not match");
-         }
-         xd->setData(data);
-         dataStack.pop();
-         if (dataStack.empty()) {
-            break;
-         }
-
-      } else if ('?' == tag[0]) { // processing instruction
-         if (0 == tag.compare(0, 4, "?xml")) { // if <?xml ... ?> tag, read character encoding
-            tag = tag.substr(1, tag.size() - 2);
+         if ('/' == tag[0]) { // end tag
+            tag.erase(0, 1);
             cutBlanks(tag);
             if (tag.empty()) {
-               throw StreamException("start tag is empty : < />");
+               throw StreamException("end tag is empty : </ >");
+            }
+            if (dataStack.empty()) {
+               throw StreamException("start tag is needed before end tag");
+            }
+            XmlData* xd(dataStack.top());
+            if (0 != tag.compare(xd->getTag())) {
+               throw StreamException("start tag and end tag are not match");
+            }
+            xd->setData(data);
+            dataStack.pop();
+            if (dataStack.empty()) {
+               break;
+            }
+
+         } else if ('?' == tag[0]) { // processing instruction
+            if (0 == tag.compare(0, 4, "?xml")) { // if <?xml ... ?> tag, read character encoding
+               tag = tag.substr(1, tag.size() - 2);
+               cutBlanks(tag);
+               if (tag.empty()) {
+                  throw StreamException("start tag is empty : < />");
+               }
+               XmlData* xd(createXmlData(tag));
+               std::string enc = xd->getAttribute("encoding");
+               if (!enc.empty()) {
+                  encoding = enc;
+               }
+               delete xd;
+            }
+         } else if ('!' == tag[0]) { // skip
+         } else { // start tag
+            bool hasEndTag(true);
+            if ('/' == tag[tag.size() - 1]) { // start tag which donot need end tag
+               tag.erase(tag.size() - 1, 1);
+               cutBlanks(tag);
+               if (tag.empty()) {
+                  throw StreamException("start tag is empty : < />");
+               }
+               data.clear(); // fail safe
+               hasEndTag = false;
             }
             XmlData* xd(createXmlData(tag));
-            std::string enc = xd->getAttribute("encoding");
-            if (!enc.empty()) {
-               encoding = enc;
+            if (dataStack.empty()) {
+               topData = xd;
+            } else {
+               dataStack.top()->addChild(xd);
             }
-            delete xd;
-         }
-      } else if ('!' == tag[0]) { // skip
-      } else { // start tag
-         bool hasEndTag(true);
-         if ('/' == tag[tag.size() - 1]) { // start tag which donot need end tag
-            tag.erase(tag.size() - 1, 1);
-            cutBlanks(tag);
-            if (tag.empty()) {
-               throw StreamException("start tag is empty : < />");
+            if (hasEndTag) {
+               dataStack.push(xd);
             }
-            data.clear(); // fail safe
-            hasEndTag = false;
-         }
-         XmlData* xd(createXmlData(tag));
-         if (dataStack.empty()) {
-            topData = xd;
-         } else {
-            dataStack.top()->addChild(xd);
-         }
-         if (hasEndTag) {
-            dataStack.push(xd);
          }
       }
+   } catch (const std::exception& ex) {
+      ERR_MSG("XML parsing error : " << ex.what());
+      delete topData;
+      throw;
    }
    return topData;
 }

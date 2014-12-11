@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -78,14 +78,14 @@ const std::string DYNAMICS_TAGS[] = {
    STR_PPPP, STR_PPP, STR_PP, STR_P, STR_MP, STR_N, STR_MF, STR_F, STR_FF, STR_FFF, STR_FFFF
 };
 
-class Comp
+class CompDynamics
 {
 public:
    //! constructor
-   Comp(const std::string& str) : target(str) {}
+   CompDynamics(const std::string& str) : target(str) {}
 
    //! destructor
-   virtual ~Comp() {}
+   virtual ~CompDynamics() {}
 
    //! ...
    bool operator()(const std::string& str) const {
@@ -171,12 +171,12 @@ void Dynamics::set(const std::string& _str)
 {
    std::string s(_str);
    toLower(s);
-   const std::string* itr(std::find_if(DYNAMICSES, DYNAMICSES + DYNAMICS_NUM, Comp(s)));
+   const std::string* itr(std::find_if(DYNAMICSES, DYNAMICSES + DYNAMICS_NUM, CompDynamics(s)));
    if (itr < DYNAMICSES + DYNAMICS_NUM) {
       value = itr - DYNAMICSES;
       return;
    }
-   itr = std::find_if(DYNAMICS_TAGS, DYNAMICS_TAGS + DYNAMICS_NUM, Comp(s));
+   itr = std::find_if(DYNAMICS_TAGS, DYNAMICS_TAGS + DYNAMICS_NUM, CompDynamics(s));
    if (itr < DYNAMICS_TAGS + DYNAMICS_NUM) {
       value = itr - DYNAMICS_TAGS;
       return;

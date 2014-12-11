@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -54,6 +54,7 @@
 #include "LabelPosition.h"
 #include "LabelMeasure.h"
 #include "ScorePosition.h"
+#include "util_score.h"
 
 using namespace sinsy;
 
@@ -61,14 +62,6 @@ namespace
 {
 const std::string DEFAULT_ENCODING = "utf-8";
 const size_t DEFAULT_TEMPO = 100;
-
-/*!
- get duration of measure
- */
-size_t getMeasureDuration(const Beat& beat)
-{
-   return BASE_DIVISIONS * 4 * beat.getBeats() / beat.getBeatType();
-}
 
 class Copier
 {
@@ -129,12 +122,20 @@ public:
    }
 
    //! set flag
-   virtual void setFlag(size_t value) {
-      labelData.set('p', 9 + diff, value);
+   virtual void setFlag(const std::string& value) {
+      if (!value.empty()) {
+         labelData.set('p', 9 + diff, value);
+      }
    }
 
    //! set position in syllable
    virtual void setPositionInSyllable(size_t idx, size_t max) {}
+
+   //! set count from previous vowel
+   virtual void setCountFromPrevVowel(size_t count) {}
+
+   //! set count to next vowel
+   virtual void setCountToNextVowel(size_t count) {}
 
 protected:
    //! label data
@@ -181,9 +182,23 @@ public:
    }
 
    //! set position in syllable
-   void setPositionInSyllable(size_t idx, size_t max) {
+   virtual void setPositionInSyllable(size_t idx, size_t max) {
       labelData.set('p', 12, std::min<size_t>(idx + 1, 9));
       labelData.set('p', 13, std::min<size_t>(max - idx, 9));
+   }
+
+   //! set count from previous vowel
+   virtual void setCountFromPrevVowel(size_t count) {
+      if (0 < count) {
+         labelData.set('p', 14, std::min<size_t>(count, 9));
+      }
+   }
+
+   //! set count to next vowel
+   virtual void setCountToNextVowel(size_t count) {
+      if (0 < count) {
+         labelData.set('p', 15, std::min<size_t>(count, 9));
+      }
    }
 };
 
@@ -1144,13 +1159,13 @@ void LabelMaker::fix()
       // add rest to fix measure
       if (0 != residualMeasureDuration) {
          WARN_MSG("Length of notes in the last measure is not just");
-         size_t dur(residualMeasureDuration);
+         int dur(residualMeasureDuration);
          while (dur < 0) {
             dur += getMeasureDuration(beat);
          }
          Note restNote;
          restNote.setRest(true);
-         restNote.setDuration(dur);
+         restNote.setDuration(static_cast<size_t>(dur));
          addNote(restNote);
          // if the last note is not rest, add a rest at last
       } else if (!noteList.empty() && !noteList.back()->isRest()) {

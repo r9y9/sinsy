@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -42,6 +42,7 @@
 #include "LabelPosition.h"
 #include "ScorePosition.h"
 #include "util_log.h"
+#include "util_score.h"
 
 using namespace sinsy;
 
@@ -155,7 +156,7 @@ void LabelPosition::setCount(size_t c)
 /*!
  get count
  */
-INT64 LabelPosition::getCount() const
+sinsy::INT64 LabelPosition::getCount() const
 {
    return count;
 }
@@ -171,7 +172,7 @@ double LabelPosition::getTime() const
 /*!
  get point
  */
-INT64 LabelPosition::getPoint() const
+sinsy::INT64 LabelPosition::getPoint() const
 {
    return static_cast<INT64>(point / BASE_DIVISIONS);
 }
@@ -179,7 +180,7 @@ INT64 LabelPosition::getPoint() const
 /*!
  get duration
  */
-INT64 LabelPosition::getDuration() const
+sinsy::INT64 LabelPosition::getDuration() const
 {
    return duration;
 }

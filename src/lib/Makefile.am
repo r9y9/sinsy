@@ -1,13 +1,13 @@
-INCLUDES = -I $(top_srcdir)/include \
-           -I converter \
-           -I hts_engine_API \
-           -I japanese \
-           -I label \
-           -I score \
-           -I temporary \
-           -I util \
-           -I xml \
-           -I @HTS_ENGINE_HEADER_DIR@
+AM_CPPFLAGS = -I @top_srcdir@/include \
+              -I converter \
+              -I hts_engine_API \
+              -I japanese \
+              -I label \
+              -I score \
+              -I temporary \
+              -I util \
+              -I xml \
+              -I @HTS_ENGINE_HEADER_DIR@
 
 lib_LIBRARIES = libSinsy.a
 

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -85,7 +85,7 @@ IReadableStream& fromStream(IReadableStream& stream, T& buf) throw (StreamExcept
 /*!
  read data from stream (char)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, char buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, char& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -93,7 +93,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, char buf) throw (Str
 /*!
  read data from stream (unsigned char)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, unsigned char buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, unsigned char& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -101,7 +101,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, unsigned char buf) t
 /*!
  read data from stream (INT16)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, INT16 buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, INT16& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -109,7 +109,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, INT16 buf) throw (St
 /*!
  read data from stream (UINT16)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, UINT16 buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, UINT16& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -117,7 +117,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, UINT16 buf) throw (S
 /*!
  read data from stream (INT32)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, INT32 buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, INT32& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -125,7 +125,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, INT32 buf) throw (St
 /*!
  read data from stream (UINT32)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, UINT32 buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, UINT32& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -133,7 +133,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, UINT32 buf) throw (S
 /*!
  read data from stream (INT64)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, INT64 buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, INT64& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -141,7 +141,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, INT64 buf) throw (St
 /*!
  read data from stream (UINT64)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, UINT64 buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, UINT64& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -149,7 +149,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, UINT64 buf) throw (S
 /*!
  read data from stream (float)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, float buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, float& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -157,7 +157,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, float buf) throw (St
 /*!
  read data from stream (double)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, double buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, double& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }
@@ -165,7 +165,7 @@ inline IReadableStream& operator>>(IReadableStream& stream, double buf) throw (S
 /*!
  read data from stream (long double)
  */
-inline IReadableStream& operator>>(IReadableStream& stream, long double buf) throw (StreamException)
+inline IReadableStream& operator>>(IReadableStream& stream, long double& buf) throw (StreamException)
 {
    return fromStream(stream, buf);
 }

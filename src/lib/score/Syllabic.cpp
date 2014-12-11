@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -59,15 +59,15 @@ const std::string SYLLABICS[] = {
    STR_SINGLE, STR_BEGIN, STR_END, STR_MIDDLE
 };
 
-class Comp
+class CompSyllabic
 {
 public:
 
    //! constructor
-   explicit Comp(const std::string& str) : target(str) {}
+   explicit CompSyllabic(const std::string& str) : target(str) {}
 
    //! destructor
-   virtual ~Comp() {}
+   virtual ~CompSyllabic() {}
 
    //! ...
    bool operator()(const std::string& str) const {
@@ -148,7 +148,7 @@ void Syllabic::set(const std::string& s)
 {
    std::string str(s);
    toLower(str);
-   const std::string* itr(std::find_if(SYLLABICS, SYLLABICS + SYLLABIC_NUM, Comp(str)));
+   const std::string* itr(std::find_if(SYLLABICS, SYLLABICS + SYLLABIC_NUM, CompSyllabic(str)));
    if (itr < SYLLABICS + SYLLABIC_NUM) {
       value = itr - SYLLABICS;
       return;

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -56,11 +56,16 @@
 #include "Syllabic.h"
 #include "ScorePosition.h"
 #include "xml_tags.h"
+#include "util_score.h"
 
 using namespace sinsy;
 
 namespace
 {
+typedef size_t WedgeType;
+WedgeType WEDGE_NONE = 0;
+WedgeType WEDGE_CRESCENDO = 1;
+WedgeType WEDGE_DECRESCENDO = 2;
 
 /*!
  NoteSetter
@@ -94,14 +99,6 @@ private:
    //! function
    Func func;
 };
-
-/*!
- get measure duration
- */
-size_t getMeasureDuration(const Beat& beat)
-{
-   return BASE_DIVISIONS * 4 * beat.getBeats() / beat.getBeatType();
-}
 
 /*!
  convert string to type T
@@ -377,7 +374,7 @@ class XmlContainer
 {
 public:
    //! constructor
-   XmlContainer(IScoreWritable& writable) : scoreWritable(writable) {}
+   XmlContainer(IScoreWritable& writable) : scoreWritable(writable), divisions(1), wedge(WEDGE_NONE), tempo(0.0) {}
 
    //! destructor
    virtual ~XmlContainer() {}
@@ -406,11 +403,15 @@ private:
 
    //! set sound
    void setSound(const XmlData* data) {
-      std::string tempo(data->getAttribute("tempo"));
-      if (tempo.empty()) {
+      std::string tempoStr(data->getAttribute("tempo"));
+      if (tempoStr.empty()) {
          return;
       }
-      measureScore.changeTempo(to<double>(tempo));
+      double t(to<double>(tempoStr));
+      if (tempo != t) {
+         measureScore.changeTempo(t);
+         tempo = t;
+      }
    }
 
    //! set wedge
@@ -421,11 +422,19 @@ private:
       }
       if (0 == type.compare("crescendo")) {
          measureScore.startCrescendo();
+         wedge = WEDGE_CRESCENDO;
       } else if (0 == type.compare("diminuendo")) {
          measureScore.startDiminuendo();
+         wedge = WEDGE_DECRESCENDO;
       } else if (0 == type.compare("stop")) {
-         measureScore.stopCrescendo();
-         measureScore.stopDiminuendo();
+         if (WEDGE_CRESCENDO == wedge) {
+            measureScore.stopCrescendo();
+         } else if (WEDGE_DECRESCENDO == wedge) {
+            measureScore.stopDiminuendo();
+         } else {
+            WARN_MSG("wedge stop tag is appeared, but crescendo and decrescendo are not set");
+         }
+         wedge = WEDGE_NONE;
       }
    }
 
@@ -583,6 +592,12 @@ private:
 
    //! measure score
    MeasureScore measureScore;
+
+   //! wedge
+   WedgeType wedge;
+
+   //! tempo
+   double tempo;
 };
 
 }; // namespace

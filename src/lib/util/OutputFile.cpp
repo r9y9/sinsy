@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -74,6 +74,9 @@ OutputFile::~OutputFile()
  */
 size_t OutputFile::write(const void* buffer, size_t size) throw (StreamException)
 {
+   if (stream.fail()) {
+      throw StreamException("OutputFile::write()");
+   }
    stream.write(static_cast<const char*>(buffer), size);
    if (stream.fail()) {
       ERR_MSG("File writing error (size: " << size << ")");

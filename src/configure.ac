@@ -1,9 +1,9 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(sinsy, 0.90)
+AC_INIT(sinsy, 0.91, http://sinsy.sourceforge.net/)
 AC_CONFIG_AUX_DIR([config])
-AC_COPYRIGHT(Copyright 2009-2013 Nagoya Institute of Technology)
-AM_INIT_AUTOMAKE(sinsy, 0.90, nostdinc no-installinfo no-installman)
+AC_COPYRIGHT(Copyright 2009-2014 Nagoya Institute of Technology)
+AM_INIT_AUTOMAKE(subdir-objects)
 
 # Checks for C compiler
 AC_PROG_CXX
@@ -88,6 +88,6 @@ case "$host_os" in
       ;;
 esac
 
-AC_CONFIG_FILES([Makefile dic/Makefile lib/Makefile bin/Makefile])
+AC_CONFIG_FILES([Makefile lib/Makefile bin/Makefile dic/Makefile])
 
 AC_OUTPUT

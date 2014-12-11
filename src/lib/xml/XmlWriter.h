@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -52,9 +52,17 @@ namespace sinsy
 {
 
 class WritableStrStream;
+class Converter;
 
 class XmlWriter : public IScoreWritable
 {
+public:
+   typedef size_t Clef;
+   static const Clef CLEF_DEFAULT;
+   static const Clef CLEF_G;
+   static const Clef CLEF_F;
+   static const Clef CLEF_C;
+
 public:
    //! constructor
    XmlWriter();
@@ -101,8 +109,9 @@ public:
    //! write xml to stream
    bool writeXml(WritableStrStream& stream) const;
 
-   //! write xml to stream using original xml
-   bool writeXml(WritableStrStream& stream, const XmlData& origData_);
+   //! set clef
+   void setClef(Clef clef);
+
 
 private:
    //! copy constructor (donot use)
@@ -117,8 +126,8 @@ private:
    //! set wedge tag
    void setWedgeTag(const std::string& type);
 
-   //! set divisions tag
-   void setDivisionsTag();
+   //! set tags of head measure
+   void setHeadMeasureTag();
 
    //! initialize xml data
    void initXmlData();
@@ -153,8 +162,13 @@ private:
    //! number of last measure
    size_t lastMeasureNumber;
 
+   //! last syllabic
+   Syllabic lastSyllabic;
+
    //! duration to check end of measure
    size_t duration;
+
+   Clef clef;
 };
 
 };

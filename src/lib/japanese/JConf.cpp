@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -43,6 +43,7 @@
 #include <limits>
 #include <deque>
 #include <vector>
+#include <iterator>
 #include "util_log.h"
 #include "util_string.h"
 #include "util_converter.h"
@@ -128,7 +129,7 @@ class InfoAdder
 public:
    //! constructor
    InfoAdder(sinsy::IConvertable& c, const std::string& cl, const PhonemeJudge& pj) :
-      convertable(c), clPhoneme(cl), phonemeJudge(pj), waiting(false), vowelReductionIdx(INVALID_IDX), enableFlag(true), falsettoFlag(false), macronFlag(false) {
+      convertable(c), clPhoneme(cl), phonemeJudge(pj), waiting(false), vowelReductionIdx(INVALID_IDX), scoreFlag(0), macronFlag(false) {
    }
 
    //! destructor
@@ -136,14 +137,9 @@ public:
       reflect();
    }
 
-   //! set enable flag
-   void setEnableFlag(bool e) {
-      enableFlag = e;
-   }
-
-   //! set falsetto flag
-   void setFalsettoFlag(bool f) {
-      falsettoFlag = f;
+   //! set score flag
+   void setScoreFlag(ScoreFlag f) {
+      scoreFlag = f;
    }
 
    //! set macron flag
@@ -160,15 +156,15 @@ public:
       bool clFlag = ((1 == p.size()) && (clPhoneme == p[0])) ? true : false;
 
       if (clFlag) { // cl
-         if (pList.empty()) { // first time
-            pList.push_back(new PhonemeTable::PhonemeList(p));
+         if (ptrList.empty()) { // first time
+            ptrList.push_back(new PhonemeTable::PhonemeList(p));
             waiting = true;
-         } else if (pList.back()->back() != clPhoneme) { // over second time, and not following cl
-            pList.back()->push_back(clPhoneme);
+         } else if (ptrList.back()->back() != clPhoneme) { // over second time, and not following cl
+            ptrList.back()->push_back(clPhoneme);
          }
       } else { // not cl
          if (waiting) { // previous syllable has vowel reduction
-            PhonemeTable::PhonemeList* prevPhonemes(pList.back());
+            PhonemeTable::PhonemeList* prevPhonemes(ptrList.back());
             if (INVALID_IDX != vowelReductionIdx) {
                prevPhonemes->erase(prevPhonemes->begin() + vowelReductionIdx);
             }
@@ -176,7 +172,7 @@ public:
             waiting = false;
             vowelReductionIdx = INVALID_IDX;
          } else {
-            pList.push_back(new PhonemeTable::PhonemeList(p));
+            ptrList.push_back(new PhonemeTable::PhonemeList(p));
          }
       }
 
@@ -185,25 +181,25 @@ public:
             WARN_MSG("Vowel reduction symbol was ignored : only one  phoneme \"" << p[0] << "\"");
          } else {
             waiting = true;
-            vowelReductionIdx = pList.back()->size() - 1; // last phoneme ( = vowel)
+            vowelReductionIdx = ptrList.back()->size() - 1; // last phoneme ( = vowel)
          }
       }
    }
 
    //! get phonemes of last syllable
    const PhonemeTable::PhonemeList* getLastPhonemes() const {
-      if (pList.empty()) {
+      if (ptrList.empty()) {
          return NULL;
       }
-      return pList.back();
+      return ptrList.back();
    }
 
    //! get phonemes of last syllable
    PhonemeTable::PhonemeList* getLastPhonemes() {
-      if (pList.empty()) {
+      if (ptrList.empty()) {
          return NULL;
       }
-      return pList.back();
+      return ptrList.back();
    }
 
 private:
@@ -215,19 +211,19 @@ private:
 
    //! reflect to convertable
    void reflect() {
-      if (pList.empty()) return;
+      if (ptrList.empty()) return;
 
       // last syllable has silent vowel
       if (waiting) {
-         if (pList.size() <= 1) {
+         if (ptrList.size() <= 1) {
             WARN_MSG("Syllable that has vowel reductions needs previous or next syllable");
          } else {
-            PhonemeTable::PhonemeList* lastPhonemes(pList.back());
-            pList.pop_back();
+            PhonemeTable::PhonemeList* lastPhonemes(ptrList.back());
+            ptrList.pop_back();
             if (INVALID_IDX != vowelReductionIdx) {
                lastPhonemes->erase(lastPhonemes->begin() + vowelReductionIdx);
             }
-            std::copy(lastPhonemes->begin(), lastPhonemes->end(), std::back_inserter(*(pList.back())));
+            std::copy(lastPhonemes->begin(), lastPhonemes->end(), std::back_inserter(*(ptrList.back())));
             delete lastPhonemes;
          }
          waiting = false;
@@ -238,34 +234,41 @@ private:
       {
          std::string info = (macronFlag) ? "1" : "0";
          std::string lastPhoneme;
-         std::vector<PhonemeTable::PhonemeList*>::iterator itr(pList.begin());
-         const std::vector<PhonemeTable::PhonemeList*>::iterator itrEnd(pList.end());
+         std::vector<PhonemeTable::PhonemeList*>::iterator itr(ptrList.begin());
+         const std::vector<PhonemeTable::PhonemeList*>::iterator itrEnd(ptrList.end());
          for (; itrEnd != itr; ++itr) {
-            const PhonemeTable::PhonemeList& phonemes(**itr);
-            if (phonemes.empty()) { // fail safe
-               continue;
-            }
+            PhonemeTable::PhonemeList& phonemes(**itr);
 
             // same vowel
-            if ((1 == phonemes.size()) && (phonemes[0] == lastPhoneme)) {
+            while (!phonemes.empty()) {
+               if (phonemes[0] != lastPhoneme) {
+                  break;
+               }
+               phonemes.erase(phonemes.begin());
+            }
+            if (phonemes.empty()) {
                continue;
             }
 
             std::vector<PhonemeInfo> phonemeInfos;
             phonemeInfos.reserve(phonemes.size());
-            const std::vector<std::string>::const_iterator itrEnd(phonemes.end());
-            for (std::vector<std::string>::const_iterator itr(phonemes.begin()); itrEnd != itr; ++itr) {
-               const std::string& type(phonemeJudge.getType(*itr));
-               phonemeInfos.push_back(PhonemeInfo(type, *itr, enableFlag, falsettoFlag));
+            const std::vector<std::string>::const_iterator iEnd(phonemes.end());
+            for (std::vector<std::string>::const_iterator i(phonemes.begin()); iEnd != i; ++i) {
+               const std::string& type(phonemeJudge.getType(*i));
+               phonemeInfos.push_back(PhonemeInfo(type, *i, scoreFlag));
             }
             convertable.addInfo(phonemeInfos, LANGUAGE_INFO, info);
-            lastPhoneme = phonemes.back();
+            if (PhonemeInfo::TYPE_VOWEL == phonemeJudge.getType(phonemes.back())) {
+               lastPhoneme = phonemes.back();
+            } else {
+               lastPhoneme.clear();
+            }
          }
       }
 
       // clear
-      std::for_each(pList.begin(), pList.end(), Deleter<PhonemeTable::PhonemeList>());
-      pList.clear();
+      std::for_each(ptrList.begin(), ptrList.end(), Deleter<PhonemeTable::PhonemeList>());
+      ptrList.clear();
    }
 
    //! target
@@ -283,17 +286,14 @@ private:
    //! index of vowel reduction
    size_t vowelReductionIdx;
 
-   //! enable flag
-   bool enableFlag;
-
-   //! falsetto flag
-   bool falsettoFlag;
+   //! score flag
+   ScoreFlag scoreFlag;
 
    //! macron flag
    bool macronFlag;
 
    //! phoneme list
-   std::vector<PhonemeTable::PhonemeList*> pList;
+   std::vector<PhonemeTable::PhonemeList*> ptrList;
 };
 
 /*!
@@ -389,7 +389,11 @@ bool expand(InfoAdder& prevInfoAdder, InfoAdder& infoAdder, const MacronTable& m
             return false;
          }
          // add "cl"
-         infoAdder.getLastPhonemes()->push_back(clSymbol);
+         PhonemeTable::PhonemeList* pl(infoAdder.getLastPhonemes());
+         if (NULL == pl) {
+            return false;
+         }
+         pl->push_back(clSymbol);
       } else { // not "cl"
          dst2.push_back(prevPhonemes->back());
          infoAdder.addSyllable(dst2, false);
@@ -489,16 +493,12 @@ bool JConf::convert(const std::string& enc, ConvertableList::iterator begin, Con
 
       std::string lyric(convertable.getLyric());
 
+      ScoreFlag scoreFlag(analyzeScoreFlags(lyric, &multibyteCharRange));
+
       size_t pos = std::string::npos;
 
-      while (std::string::npos != (pos = lyric.find(DISABLE_CHAR))) {
-         infoAdder->setEnableFlag(false);
-         lyric.erase(pos, 1);
-      }
-      while (std::string::npos != (pos = lyric.find(FALSETTO_CHAR))) {
-         infoAdder->setFalsettoFlag(true);
-         lyric.erase(pos, 1);
-      }
+
+      infoAdder->setScoreFlag(scoreFlag);
       while (!lyric.empty()) {
          if (!vowelReductionSymbol.empty() && (0 == lyric.compare(0, vowelReductionSymbol.size(), vowelReductionSymbol))) { // vowel reduction
             WARN_MSG("Vowel reduction symbol appeared at the invalid place");

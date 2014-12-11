@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -70,7 +70,9 @@ bool MultibyteCharRange::addRange(size_t sz, unsigned char b, unsigned char e)
       return false;
    }
    if (e < b) {
-      std::swap<unsigned char>(b, e);
+      unsigned char tmp = b;
+      b = e;
+      e = tmp;
    }
 
    // check overlapping

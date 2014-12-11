@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -57,20 +57,21 @@
 #include "WritableStrStream.h"
 #include "xml_tags.h"
 #include "util_converter.h"
+#include "util_score.h"
+#include "Converter.h"
 
 using namespace sinsy;
+
+const XmlWriter::Clef XmlWriter::CLEF_DEFAULT = 0;
+const XmlWriter::Clef XmlWriter::CLEF_G = 1;
+const XmlWriter::Clef XmlWriter::CLEF_F = 2;
+const XmlWriter::Clef XmlWriter::CLEF_C = 3;
 
 namespace
 {
 const char FLAT = 'b';
-
-/*!
- get measure duration
- */
-size_t getMeasureDuration(const Beat& beat)
-{
-   return BASE_DIVISIONS * 4 * beat.getBeats() / beat.getBeatType();
-}
+const std::string DEFAULT_CLEF = "G";
+const std::string DEFAULT_LINE = "0";
 
 /*!
  convert type T to string
@@ -83,94 +84,113 @@ std::string toStr(const T& value)
    return oss.str();
 }
 
-const std::string STR_ATTRIBUTE = "attribute";
-const std::string STR_NEW_SYSTEM = "new-system";
+
+std::string clefToStr(XmlWriter::Clef clef)
+{
+   if (XmlWriter::CLEF_DEFAULT == clef) {
+      throw std::runtime_error("clefToStr() clef is default");
+   }
+   if (XmlWriter::CLEF_G == clef) {
+      return "G";
+   }
+   if (XmlWriter::CLEF_F == clef) {
+      return "F";
+   }
+   if (XmlWriter::CLEF_C == clef) {
+      return "C";
+   }
+   throw std::runtime_error("clefToStr() clef is invalid");
+}
 
 /*!
- reflect xml
-
- @return if failed return false
+ get child data of target tag
  */
-bool reflectXml(const XmlData& src, XmlData& dst, std::stack<std::string>& tagStack)
+XmlData* getChildData(XmlData& parent, const std::string& tag)
 {
-   bool ret(true);
-   if (!tagStack.empty()) {
-      std::string tag(tagStack.top());
-
-      const XmlData::Children::const_iterator srcItrEnd(src.childEnd());
-      XmlData::Children::const_iterator srcItr(src.childBegin());
-      const XmlData::Children::iterator dstItrEnd(dst.childEnd());
-      XmlData::Children::iterator dstItr(dst.childBegin());
-
-      while ((srcItrEnd != srcItr) && (dstItrEnd != dstItr)) {
-         for (; srcItrEnd != srcItr; ++srcItr) {
-            if (tag == (*srcItr)->getTag()) {
-               break;
-            }
-         }
-         for (; dstItrEnd != dstItr; ++dstItr) {
-            if (tag == (*dstItr)->getTag()) {
-               break;
-            }
-         }
-
-         if ((srcItrEnd != srcItr) && (dstItrEnd != dstItr)) {
-            tagStack.pop();
-            ret = reflectXml(**srcItr, **dstItr, tagStack);
-            tagStack.push(tag);
-            ++srcItr;
-            ++dstItr;
-         } else {
-            ret = false;
-         }
+   XmlData* ret(NULL);
+   XmlData::Children::iterator itr(parent.childBegin());
+   const XmlData::Children::iterator itrEnd(parent.childEnd());
+   for (; itrEnd != itr; ++itr) {
+      if ((*itr)->getTag() == tag) {
+         ret = *itr;
+         break;
       }
-   } else {
-      std::string srcStr(src.getData());
-      size_t idx(srcStr.find(PHONEME_BEGIN));
-      if (0 == srcStr.compare(0, idx, dst.getData(), 0, idx)) {
-         dst.setData(src.getData());
-      } else {
-         ERR_MSG("Cannot add pronunciations (XML structures are different) src[" << srcStr << "], dst[" << dst.getData() << "]");
-         ret = false;
-      }
-
+   }
+   if (NULL == ret) {
+      ret = new XmlData(tag);
+      parent.addChild(ret);
    }
    return ret;
 }
 
 /*!
- if false is returned, erase the iterator
+ add clef tag to head of score
  */
-bool eraseNewSystem(XmlData& data, std::stack<std::string>& tagStack)
+void addClefToHead(XmlData& top, XmlWriter::Clef clefType)
+{
+   if (XmlWriter::CLEF_DEFAULT == clefType) {
+      return;
+   }
+
+   XmlData* part(getChildData(top, TAG_PART));
+   XmlData* measure(getChildData(*part, TAG_MEASURE));
+   XmlData* attributes(getChildData(*measure, TAG_ATTRIBUTES));
+   XmlData* clef(getChildData(*attributes, TAG_CLEF));
+   XmlData* sign(getChildData(*clef, TAG_SIGN));
+   XmlData* line(getChildData(*clef, TAG_LINE));
+
+   sign->setData(clefToStr(clefType));
+   line->setData(DEFAULT_LINE);
+}
+
+/*!
+ change clef
+
+ @return if failed return false
+ */
+void changeClef(XmlData& data, std::stack<std::string>& tagStack, XmlWriter::Clef clef)
 {
    if (!tagStack.empty()) {
-      std::string tag(tagStack.top());
+      const std::string tag(tagStack.top());
 
-      XmlData::Children::iterator itrEnd(data.childEnd());
       XmlData::Children::iterator itr(data.childBegin());
-
-      while (itrEnd != itr) {
-         for (; itrEnd != itr; ++itr) {
-            if (tag == (*itr)->getTag()) {
-               break;
-            }
-         }
-
-         if (itrEnd != itr) {
+      const XmlData::Children::iterator itrEnd(data.childEnd());
+      for (; itrEnd != itr; ++itr) {
+         if (tag == (*itr)->getTag()) {
             tagStack.pop();
-            if (!eraseNewSystem(**itr, tagStack)) {
-               itr = data.eraseChild(itr);
-               itrEnd = data.childEnd();
-            } else {
-               ++itr;
-            }
+            changeClef(**itr, tagStack, clef);
             tagStack.push(tag);
          }
       }
-   } else if (data.getAttribute(STR_ATTRIBUTE) == STR_NEW_SYSTEM) { // <scripts attributes = "new-system">
-      return false;
+   } else {
+      XmlData::Children::iterator itr(data.childBegin());
+      const XmlData::Children::iterator itrEnd(data.childEnd());
+      for (; itrEnd != itr; ++itr) {
+         if (TAG_SIGN == (*itr)->getTag()) {
+            (*itr)->setData(clefToStr(clef));
+         } else if (TAG_LINE == (*itr)->getTag()) {
+            (*itr)->setData(DEFAULT_LINE);
+         }
+      }
    }
-   return true;
+}
+
+void changeClefTag(XmlData& data, XmlWriter::Clef clef)
+{
+   if (XmlWriter::CLEF_DEFAULT == clef) {
+      return;
+   }
+
+   addClefToHead(data, clef);
+
+   std::stack<std::string> tagStack;
+
+   tagStack.push(TAG_CLEF);
+   tagStack.push(TAG_ATTRIBUTES);
+   tagStack.push(TAG_MEASURE);
+   tagStack.push(TAG_PART);
+
+   changeClef(data, tagStack, clef);
 }
 
 }; // namespace
@@ -179,7 +199,7 @@ bool eraseNewSystem(XmlData& data, std::stack<std::string>& tagStack)
  constructor
  */
 XmlWriter::XmlWriter() :
-   xmlData(NULL), part(NULL), lastMeasure(NULL), lastMeasureNumber(0), duration(0)
+   xmlData(NULL), part(NULL), lastMeasure(NULL), lastMeasureNumber(0), duration(0), clef(CLEF_DEFAULT)
 {
    initXmlData();
 }
@@ -381,18 +401,34 @@ void XmlWriter::addNote(const Note& note)
             n.setTieStart(true);
             n.setTieStop(false);
             n.setSlurStart(false);
+            if(note.getSyllabic() == Syllabic::SINGLE)
+               n.setSyllabic(Syllabic::BEGIN);
+            else if(note.getSyllabic() == Syllabic::END)
+               n.setSyllabic(Syllabic::MIDDLE);
          } else if (last) {
             n.setLyric("");
             n.setTieStart(false);
             n.setTieStop(true);
             n.setSlurStop(false);
+            if(note.getSyllabic() == Syllabic::SINGLE)
+               n.setSyllabic(Syllabic::END);
+            else if(note.getSyllabic() == Syllabic::BEGIN)
+               n.setSyllabic(Syllabic::MIDDLE);
          } else {
             n.setLyric("");
             n.setTieStart(false);
             n.setTieStop(false);
             n.setSlurStart(false);
             n.setSlurStop(false);
+            if(note.getSyllabic() != Syllabic::MIDDLE)
+               n.setSyllabic(Syllabic::MIDDLE);
          }
+
+         if((lastSyllabic == Syllabic::BEGIN || lastSyllabic == Syllabic::MIDDLE) && n.getSyllabic() == Syllabic::SINGLE) {
+            n.setSyllabic(Syllabic::MIDDLE);
+         }
+         lastSyllabic = n.getSyllabic();
+
          n.setDuration(d);
          setNoteTag(n); // set tags
          first = false;
@@ -537,12 +573,10 @@ void XmlWriter::setNoteTag(const Note& note)
    if (!note.isRest()) {
       // lyric
       const std::string& lyric(note.getLyric());
-      if (!lyric.empty()) {
-         XmlData* lyricTag = new XmlData(TAG_LYRIC);
-         lyricTag->addChild(new XmlData(TAG_SYLLABIC, toStr(note.getSyllabic()))); // syllabic
-         lyricTag->addChild(new XmlData(TAG_TEXT, lyric)); // text
-         noteTag->addChild(lyricTag);
-      }
+      XmlData* lyricTag = new XmlData(TAG_LYRIC);
+      lyricTag->addChild(new XmlData(TAG_SYLLABIC, toStr(note.getSyllabic()))); // syllabic
+      lyricTag->addChild(new XmlData(TAG_TEXT, lyric)); // text
+      noteTag->addChild(lyricTag);
    }
 
    addXmlData(noteTag);
@@ -569,12 +603,15 @@ void XmlWriter::setWedgeTag(const std::string& type)
 /*!
  @internal
 
- set divisions tag
+ set tags of head measure
  */
-void XmlWriter::setDivisionsTag()
+void XmlWriter::setHeadMeasureTag()
 {
    XmlData* attributes = new XmlData(TAG_ATTRIBUTES);
+
+   // divisions
    attributes->addChild(new XmlData(TAG_DIVISIONS, toStr(BASE_DIVISIONS)));
+
    addXmlData(attributes);
 }
 
@@ -603,7 +640,10 @@ void XmlWriter::initXmlData()
    lastBeat = Beat();
    lastMeasure = NULL;
    lastMeasureNumber = 0;
+   lastSyllabic = Syllabic::SINGLE;
    duration = 0;
+
+   // donot initialize clef
 }
 
 /*!
@@ -629,7 +669,7 @@ XmlData* XmlWriter::getLastMeasure()
    if (NULL == lastMeasure) {
       lastMeasure = new XmlData(TAG_MEASURE);
       if (0 == lastMeasureNumber) { // set divisions tag to the first measure
-         setDivisionsTag();
+         setHeadMeasureTag();
       }
       ++lastMeasureNumber;
       lastMeasure->addAttribute("number", toStr(lastMeasureNumber));
@@ -650,6 +690,17 @@ void XmlWriter::addXmlData(XmlData* data)
 }
 
 /*!
+ set clef
+ */
+void XmlWriter::setClef(Clef c)
+{
+   if ((CLEF_DEFAULT != c) && (CLEF_G != c) && (CLEF_F != c) && (CLEF_C != c)) {
+      throw std::runtime_error("Invalid clef");
+   }
+   clef = c;
+}
+
+/*!
  write xml to stream
 
  @param stream output stream
@@ -662,6 +713,11 @@ bool XmlWriter::writeXml(WritableStrStream& stream) const
       return false;
    }
 
+   // change clef tag
+   if (CLEF_DEFAULT != clef) {
+      changeClefTag(*xmlData, clef);
+   }
+
    stream << "<\?xml version=\"1.0\" encoding=\"" << encoding << "\"\?>\n";
    stream << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 2.0 Partwise//EN\"\n";
    stream << "                                \"http://www.musicxml.org/dtds/partwise.dtd\">\n";
@@ -670,45 +726,3 @@ bool XmlWriter::writeXml(WritableStrStream& stream) const
    return true;
 }
 
-/*!
- write xml to stream using original xml
-
- @param stream output stream
- @origData_ oroginal MusicXML
- @return if success, true
- */
-bool XmlWriter::writeXml(WritableStrStream& stream, const XmlData& origData_)
-{
-   XmlData origData(origData_); // copy
-
-   // erase <supports attributes="new-system">
-   {
-      std::stack<std::string> tagStack;
-
-      tagStack.push(TAG_SUPPORTS);
-      tagStack.push(TAG_ENCODING);
-      tagStack.push(TAG_IDENTIFICATION);
-
-      eraseNewSystem(origData, tagStack);
-   }
-
-   // reflect pronunciations to origData
-   {
-      std::stack<std::string> tagStack;
-
-      tagStack.push(TAG_TEXT);
-      tagStack.push(TAG_LYRIC);
-      tagStack.push(TAG_NOTE);
-      tagStack.push(TAG_MEASURE);
-      tagStack.push(TAG_PART);
-
-      reflectXml(*(this->xmlData), origData, tagStack);
-   }
-
-   XmlData* oldXmlData(this->xmlData);
-   this->xmlData = &origData;
-   bool ret = this->writeXml(stream);
-   this->xmlData = oldXmlData;
-
-   return ret;
-}

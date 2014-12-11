@@ -1,6 +1,6 @@
 EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL NEWS README
 
-SUBDIRS = dic lib bin
+SUBDIRS = lib bin dic
 
 include_HEADERS = include/sinsy.h
 

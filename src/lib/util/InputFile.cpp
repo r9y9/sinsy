@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -75,6 +75,9 @@ InputFile::~InputFile()
  */
 size_t InputFile::read(void* buffer, size_t size) throw (StreamException)
 {
+   if(stream.fail()) {
+      throw StreamException("InputFile::read()");
+   }
    if (stream.eof()) {
       return 0;
    }

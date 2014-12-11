@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -53,21 +53,21 @@ const std::string PhonemeInfo::TYPE_BREAK     = "b";
 /*!
  constructor
  */
-PhonemeInfo::PhonemeInfo() : enableFlag(true), falsettoFlag(false)
+PhonemeInfo::PhonemeInfo() : scoreFlag(0)
 {
 }
 
 /*!
  constructor
  */
-PhonemeInfo::PhonemeInfo(const std::string& t, const std::string& p, bool e, bool f) : type(t), phoneme(p), enableFlag(e), falsettoFlag(f)
+PhonemeInfo::PhonemeInfo(const std::string& t, const std::string& p, ScoreFlag f) : type(t), phoneme(p), scoreFlag(f)
 {
 }
 
 /*!
  copy constructor
  */
-PhonemeInfo::PhonemeInfo(const PhonemeInfo& obj) : type(obj.type), phoneme(obj.phoneme), enableFlag(obj.enableFlag), falsettoFlag(obj.falsettoFlag)
+PhonemeInfo::PhonemeInfo(const PhonemeInfo& obj) : type(obj.type), phoneme(obj.phoneme), scoreFlag(obj.scoreFlag)
 {
 }
 
@@ -85,8 +85,7 @@ PhonemeInfo& PhonemeInfo::operator=(const PhonemeInfo& obj)
 {
    this->type = obj.type;
    this->phoneme = obj.phoneme;
-   this->enableFlag = obj.enableFlag;
-   this->falsettoFlag = obj.falsettoFlag;
+   this->scoreFlag = obj.scoreFlag;
    return *this;
 }
 
@@ -107,17 +106,9 @@ const std::string& PhonemeInfo::getPhoneme() const
 }
 
 /*!
- return which enable or not
+ return score flag
  */
-bool PhonemeInfo::isEnable() const
+ScoreFlag PhonemeInfo::getScoreFlag() const
 {
-   return this->enableFlag;
-}
-
-/*!
- return which falsetto or not
- */
-bool PhonemeInfo::isFalsetto() const
-{
-   return this->falsettoFlag;
+   return this->scoreFlag;
 }

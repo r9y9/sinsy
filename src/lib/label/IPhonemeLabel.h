@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -58,10 +58,16 @@ public:
    virtual void setName(const std::string& name) = 0;
 
    //! set flag
-   virtual void setFlag(size_t flag) = 0;
+   virtual void setFlag(const std::string& flag) = 0;
 
    //! set position in syllable
    virtual void setPositionInSyllable(size_t idx, size_t max) = 0;
+
+   //! set count from previous vowel
+   virtual void setCountFromPrevVowel(size_t count) = 0;
+
+   //! set count to next vowel
+   virtual void setCountToNextVowel(size_t count) = 0;
 };
 
 };

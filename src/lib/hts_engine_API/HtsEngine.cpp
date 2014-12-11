@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -107,6 +107,9 @@ bool HtsEngine::load(const std::vector<std::string>& voices)
 
    // get HTS voice file names
    fn_voices = (char **) malloc(voices.size() * sizeof(char *));
+   if (NULL == fn_voices) {
+      throw std::bad_alloc();
+   }
    for(i = 0; i < voices.size(); i++) {
       fn_voices[i] = strdup(voices[i].c_str());
    }
@@ -171,16 +174,17 @@ bool HtsEngine::synthesize(const LabelStrings& label, SynthConditionImpl& condit
       HTS_Engine_set_audio_buff_size(&engine, 0);
    }
 
-   bool result = true;
+   int error = 0; // 0: no error 1: unknown error 2: bad alloc
    if(HTS_Engine_synthesize_from_strings(&engine, (char**) label.getData(), label.size()) != TRUE) {
-      result = false;
+      error = 1;
    }
 
    if (saveFlag) {
-      HTS_Engine_save_riff(&engine, fp);
+      if(0 == error)
+         HTS_Engine_save_riff(&engine, fp);
       fclose(fp);
    }
-   if (storeFlag) {
+   if (storeFlag && 0 == error) {
       if(condition.waveformBuffer) {
          size_t numSamples = HTS_Engine_get_nsamples(&engine);
          condition.waveformBuffer->resize(numSamples);
@@ -193,7 +197,10 @@ bool HtsEngine::synthesize(const LabelStrings& label, SynthConditionImpl& condit
 
    HTS_Engine_refresh(&engine);
 
-   return result;
+   if (2 == error) {
+      throw std::bad_alloc();
+   }
+   return (0 == error);
 }
 
 /*!

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -50,7 +50,7 @@ const std::string PhonemeLabeler::BREATH_PHONEME = "br"; //!< breath
 /*!
  constructor
  */
-PhonemeLabeler::PhonemeLabeler(const PhonemeInfo& p) : phonemeInfo(p), idxInSyllable(0), numInSyllable(0)
+PhonemeLabeler::PhonemeLabeler(const PhonemeInfo& p) : phonemeInfo(p), idxInSyllable(0), numInSyllable(0), countFromPrevVowel(0), countToNextVowel(0)
 {
 }
 
@@ -68,36 +68,34 @@ void PhonemeLabeler::setLabel(IPhonemeLabel& label, int overwriteEnableFlag) con
 {
    label.setType(phonemeInfo.getType());
    label.setName(phonemeInfo.getPhoneme());
-   size_t flag = 0;
 
-   if (((0 == overwriteEnableFlag) && phonemeInfo.isEnable()) || (1 == overwriteEnableFlag)) {
-      flag |= static_cast<size_t>(1);
+   ScoreFlag flag(phonemeInfo.getScoreFlag());
+
+   if (1 == overwriteEnableFlag) {
+      unsetDisableFlag(flag);
+   } else if (2 == overwriteEnableFlag) {
+      setDisableFlag(flag);
+   } else if (0 != overwriteEnableFlag) {
+      throw std::invalid_argument("PhonemeLabeler::setLabel() Overwrite enable flag is invalid");
    }
-   if (phonemeInfo.isFalsetto()) {
-      flag |= static_cast<size_t>(2);
-   }
-   label.setFlag(flag);
+
+   label.setFlag(getScoreFlagStr(flag));
 
    if (numInSyllable < idxInSyllable) {
       throw std::runtime_error("PhonemeLabeler::setLabel() numInSyllable < idxInSyllable");
    }
    label.setPositionInSyllable(idxInSyllable, numInSyllable);
+
+   label.setCountFromPrevVowel(countFromPrevVowel);
+   label.setCountToNextVowel(countToNextVowel);
 }
 
 /*!
- return which enable or not
+ get score flag
  */
-bool PhonemeLabeler::isEnable() const
+ScoreFlag PhonemeLabeler::getScoreFlag() const
 {
-   return phonemeInfo.isEnable();
-}
-
-/*!
- return which falset or not
- */
-bool PhonemeLabeler::isFalsetto() const
-{
-   return phonemeInfo.isFalsetto();
+   return phonemeInfo.getScoreFlag();
 }
 
 /*!
@@ -115,3 +113,28 @@ void PhonemeLabeler::setNumInSyllable(size_t n)
 {
    numInSyllable = n;
 }
+
+/*!
+ get phoneme type
+ */
+const std::string& PhonemeLabeler::getPhonemeType() const
+{
+   return phonemeInfo.getType();
+}
+
+/*!
+ set count from previous vowel
+ */
+void PhonemeLabeler::setCountFromPrevVowel(size_t count)
+{
+   this->countFromPrevVowel = count;
+}
+
+/*!
+ set count to next vowel
+ */
+void PhonemeLabeler::setCountToNextVowel(size_t count)
+{
+   this->countToNextVowel = count;
+}
+

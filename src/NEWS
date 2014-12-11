@@ -1,2 +1,9 @@
+Version 0.91:
+ * add clef type selector to XML save function.
+ * integrate chained vowels to one vowel.
+ * expand score flag to 8-bit.
+ * add new context: distance between consonant and vowel.
+ * fix many bugs.
+
 Version 0.90:
  * released in SourceForge.

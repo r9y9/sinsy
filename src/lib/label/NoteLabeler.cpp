@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -153,47 +153,30 @@ Syllabic NoteLabeler::getSyllabic() const
    if (dataList.empty()) {
       throw std::runtime_error("NoteLabeler::getSyllabic() dataList is empty");
    }
-   Syllabic ret(Syllabic::SINGLE);
-   Syllabic first(dataList.front()->getNote().getSyllabic());
-   Syllabic last(first);
 
-   // search last note which has a lyric
-   DataList::const_reverse_iterator itr(dataList.rbegin());
-   const DataList::const_reverse_iterator itrREnd(dataList.rend());
-   for (; itrREnd != itr; ++itr) {
-      if (!(*itr)->getNote().getLyric().empty()) {
-         last = (*itr)->getNote().getSyllabic();
-         break;
+   Syllabic ret(dataList.front()->getNote().getSyllabic());
+   const DataList::const_iterator itrEnd(dataList.end());
+   for (DataList::const_iterator itr(dataList.begin() + 1); itrEnd != itr; ++itr) {
+      Syllabic syllabic((*itr)->getNote().getSyllabic());
+      if (Syllabic::BEGIN == syllabic) {
+         if (Syllabic::END == ret) {
+            ret = Syllabic::MIDDLE;
+         } else {
+            ret = Syllabic::BEGIN;
+         }
+      } else if (Syllabic::END == syllabic) {
+         if (Syllabic::BEGIN == ret) {
+            ret = Syllabic::SINGLE;
+         } else {
+            ret = Syllabic::END;
+         }
+      } else if (Syllabic::MIDDLE == syllabic) {
+         if (Syllabic::SINGLE == ret) {
+            ret = Syllabic::MIDDLE;
+         }
       }
    }
 
-   if (first == last) {
-      ret = first;
-   } else if (Syllabic::SINGLE == first) {
-      if (Syllabic::END == last) {
-         ret = Syllabic::END;
-      } else {
-         ret = Syllabic::BEGIN;
-      }
-   } else if (Syllabic::BEGIN == first) {
-      if (Syllabic::MIDDLE == last) {
-         ret = Syllabic::BEGIN;
-      } else {
-         ret = Syllabic::SINGLE;
-      }
-   } else if (Syllabic::END == first) {
-      if (Syllabic::SINGLE == last) {
-         ret = Syllabic::END;
-      } else {
-         ret = Syllabic::MIDDLE;
-      }
-   } else if (Syllabic::MIDDLE == first) {
-      if (Syllabic::BEGIN == last) {
-         ret = Syllabic::MIDDLE;
-      } else {
-         ret = Syllabic::END;
-      }
-   }
    return ret;
 }
 
@@ -324,8 +307,9 @@ void NoteLabeler::setLabel(INoteLabel& label) const
       size_t d = 0;
       const DataList::const_iterator itrEnd(dataList.end());
       for (DataList::const_iterator itr(dataList.begin()); itrEnd != itr; ++itr) {
-         d += 1;
-         t += (*itr)->getTempo();
+         size_t dur((*itr)->getNote().getDuration());
+         d += dur;
+         t += (*itr)->getTempo() * dur;
       }
       label.setTempo(t / d);
    }
@@ -764,7 +748,7 @@ void NoteLabeler::setBreathPhoneme()
       return;
    }
 
-   PhonemeLabeler* br = new PhonemeLabeler(PhonemeInfo(PhonemeInfo::TYPE_BREAK, PhonemeLabeler::BREATH_PHONEME, (*phonemeItr)->isEnable(), (*phonemeItr)->isFalsetto()));
+   PhonemeLabeler* br = new PhonemeLabeler(PhonemeInfo(PhonemeInfo::TYPE_BREAK, PhonemeLabeler::BREATH_PHONEME, (*phonemeItr)->getScoreFlag()));
    (*lastSyllableItr)->addChild(br);
 }
 

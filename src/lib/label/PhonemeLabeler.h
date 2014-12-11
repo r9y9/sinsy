@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -64,17 +64,23 @@ public:
    //! set label
    virtual void setLabel(IPhonemeLabel&, int overwriteEnableFlag = 0) const;
 
-   //! return which enable or not
-   bool isEnable() const;
-
-   //! return which falsetto or not
-   bool isFalsetto() const;
+   //! get score flag
+   ScoreFlag getScoreFlag() const;
 
    //! set index in syllable
    void setIdxInSyllable(size_t i);
 
    //! set number in syllable
    void setNumInSyllable(size_t n);
+
+   //! get phoneme type
+   const std::string& getPhonemeType() const;
+
+   //! set count from previous vowel
+   void setCountFromPrevVowel(size_t count);
+
+   //! set count to next vowel
+   void setCountToNextVowel(size_t count);
 
 private:
    //! copy constructor (donot use)
@@ -91,6 +97,12 @@ private:
 
    //! number in syllable
    size_t numInSyllable;
+
+   //! count from prev vowel
+   size_t countFromPrevVowel;
+
+   //! count to next vowel
+   size_t countToNextVowel;
 };
 
 };

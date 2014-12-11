@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -55,14 +55,14 @@ const std::string STR_MAJOR = "major";
 const std::string STR_MINOR = "minor";
 const std::string MODES[] = {STR_MAJOR, STR_MINOR};
 
-class Comp
+class CompMode
 {
 public:
    //! constructor
-   explicit Comp(const std::string& str) : target(str) {}
+   explicit CompMode(const std::string& str) : target(str) {}
 
    //! destructor
-   virtual ~Comp() {}
+   virtual ~CompMode() {}
 
    //! ...
    bool operator()(const std::string& str) const {
@@ -143,7 +143,7 @@ void Mode::set(const std::string& str)
 {
    std::string s(str);
    toLower(s);
-   const std::string* itr(std::find_if(MODES, MODES + MODE_NUM, Comp(s)));
+   const std::string* itr(std::find_if(MODES, MODES + MODE_NUM, CompMode(s)));
    if (itr < MODES + MODE_NUM) {
       value = itr - MODES;
       return;

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -42,15 +42,11 @@
 #include <stdexcept>
 #include <algorithm>
 #include "util_log.h"
+#include "util_converter.h"
 #include "ConfGroup.h"
 #include "Deleter.h"
 
 using namespace sinsy;
-
-namespace
-{
-const std::string SIL_STR = "sil";
-};
 
 /*!
  constructor
@@ -83,11 +79,15 @@ bool ConfGroup::convert(const std::string& enc, ConvertableList::iterator begin,
    const ConfList::const_iterator itrEnd(confs.end());
    for (ConfList::const_iterator itr(confs.begin()); itrEnd != itr; ++itr) {
       ConvertableList::iterator b(begin);
-      for (ConvertableList::iterator i(b); ; ++i) {
-         if ((end == i) || (*i)->isConverted()) {
-            (*itr)->convert(enc, b, i);
-            b = i;
-            if (end == i) break;
+      for (ConvertableList::iterator e(b); ; ++e) {
+         if ((end == e) || (*e)->isConverted()) {
+            if (b == e) { // skip
+               ++b;
+            } else {
+               (*itr)->convert(enc, b, e);
+               b = e;
+            }
+            if (end == e) break;
          }
       }
    }
@@ -113,5 +113,5 @@ std::string ConfGroup::getSilStr() const
    if (!confs.empty()) {
       return confs.front()->getSilStr();
    }
-   return SIL_STR;
+   return DEFAULT_SIL_STR;
 }

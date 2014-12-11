@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2013  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -49,15 +49,27 @@
 
 namespace sinsy
 {
-const char DISABLE_CHAR = '#';
-const char FALSETTO_CHAR = '$';
-const char ACCENT_CHAR = '~';
-const char STRESS_CHAR = '*';
+typedef UINT8 ScoreFlag;
 
-const char PHONEME_BEGIN = '[';
-const char PHONEME_END = ']';
-const std::string PHONEME_DELIMITER = ",";
-const std::string SYLLABLE_DELIMITER = "|";
+
+const std::string DEFAULT_SIL_STR = "sil";
+const std::string DEFAULT_PAU_STR = "pau";
+
+class MultibyteCharRange;
+
+//! analyze score flags
+ScoreFlag analyzeScoreFlags(std::string& str, const MultibyteCharRange* = NULL);
+
+bool isEnableFlag(ScoreFlag flag);
+
+std::string getScoreFlagStr(ScoreFlag flag);
+
+ScoreFlag& setDisableFlag(ScoreFlag& flag);
+
+ScoreFlag& unsetDisableFlag(ScoreFlag& flag);
+
+ScoreFlag& setFalsettoFlag(ScoreFlag& flag);
+
 };
 
 #endif // SINSY_UTIL_CONVERTER_H_
