@@ -53,13 +53,13 @@ const char* DEFAULT_LANGS = "j";
 void usage()
 {
    std::cout << "The HMM-Based Singing Voice Syntheis System \"Sinsy\"" << std::endl;
-   std::cout << "Version 0.90 (http://sinsy.sourceforge.net/)" << std::endl;
-   std::cout << "Copyright (C) 2009-2013 Nagoya Institute of Technology" << std::endl;
+   std::cout << "Version 0.91 (http://sinsy.sourceforge.net/)" << std::endl;
+   std::cout << "Copyright (C) 2009-2014 Nagoya Institute of Technology" << std::endl;
    std::cout << "All rights reserved." << std::endl;
    std::cout << "" << std::endl;
    std::cout << "The HMM-Based Speech Synthesis Engine \"hts_engine API\"" << std::endl;
-   std::cout << "Version 1.08 (http://hts-engine.sourceforge.net/)" << std::endl;
-   std::cout << "Copyright (C) 2001-2013 Nagoya Institute of Technology" << std::endl;
+   std::cout << "Version 1.09 (http://hts-engine.sourceforge.net/)" << std::endl;
+   std::cout << "Copyright (C) 2001-2014 Nagoya Institute of Technology" << std::endl;
    std::cout << "              2001-2008 Tokyo Institute of Technology" << std::endl;
    std::cout << "All rights reserved." << std::endl;
    std::cout << "" << std::endl;
