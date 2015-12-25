@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -45,7 +45,6 @@
 #include "IConf.h"
 #include "ConfGroup.h"
 #include "UnknownConf.h"
-#include "IConf.h"
 
 namespace sinsy
 {

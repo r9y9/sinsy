@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -45,7 +45,8 @@
 #include "util_log.h"
 #include "util_string.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -166,3 +167,5 @@ bool MacronTable::divide(const PhonemeList& src_, PhonemeList& dst1, PhonemeList
    dst1.clear();
    return false;
 }
+
+};  // namespace sinsy

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -42,7 +42,8 @@
 #include "InputFile.h"
 #include "util_log.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -113,3 +114,17 @@ bool InputFile::isValid() const
 {
    return !stream.fail();
 }
+
+/*!
+ read a line
+ */
+bool InputFile::readLine(std::string& line)
+{
+   if (!isValid() || isEof()) {
+      return false;
+   }
+   getline(stream, line);
+   return true;
+}
+
+};  // namespace sinsy

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -49,7 +49,8 @@
 #include "util_converter.h"
 #include "Deleter.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -168,3 +169,5 @@ bool Converter::convert(const std::string& enc, IConf::ConvertableList::iterator
 
    return true;
 }
+
+};  // namespace sinsy

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -49,7 +49,8 @@
 #include "LabelStrings.h"
 #include "SynthConditionImpl.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -167,6 +168,7 @@ bool HtsEngine::synthesize(const LabelStrings& label, SynthConditionImpl& condit
          return false;
       }
    }
+
    size_t x = HTS_Engine_get_audio_buff_size(&engine);
    if (playFlag) {
       HTS_Engine_set_audio_buff_size(&engine, x); // reset audio device
@@ -288,9 +290,11 @@ bool HtsEngine::setInterpolationWeight(size_t index, double weight)
 
    HTS_Engine_set_duration_interpolation_weight(&engine, index, weight);
    for(size_t i = 0; i < HTS_Engine_get_nstream(&engine); i++) {
-      HTS_Engine_set_parameter_interpolation_weight(&engine, i, index, weight);
-      HTS_Engine_set_gv_interpolation_weight(&engine, i, index, weight);
+      HTS_Engine_set_parameter_interpolation_weight(&engine, index, i, weight);
+      HTS_Engine_set_gv_interpolation_weight(&engine, index, i, weight);
    }
 
    return true;
 }
+
+};  // namespace sinsy

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -41,12 +41,15 @@
 
 #include "IStringable.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  to stream
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const IStringWritable& obj)
+std::ostream& operator<<(std::ostream& os, const IStringWritable& obj)
 {
    return obj.toStringStream(os);
 }
+
+};  // namespace sinsy

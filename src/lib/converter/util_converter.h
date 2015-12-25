@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -59,6 +59,8 @@ class MultibyteCharRange;
 
 //! analyze score flags
 ScoreFlag analyzeScoreFlags(std::string& str, const MultibyteCharRange* = NULL);
+
+std::string restoreScoreFlag(ScoreFlag flag);
 
 bool isEnableFlag(ScoreFlag flag);
 

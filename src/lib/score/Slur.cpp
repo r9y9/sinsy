@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -43,7 +43,8 @@
 #include "util_log.h"
 #include "Slur.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -164,7 +165,7 @@ void Slur::clear()
 /*!
  to stream
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const Slur& slur)
+std::ostream& operator<<(std::ostream& os, const Slur& slur)
 {
 
    {
@@ -190,3 +191,5 @@ std::ostream& sinsy::operator<<(std::ostream& os, const Slur& slur)
    }
    return os;
 }
+
+};  // namespace sinsy

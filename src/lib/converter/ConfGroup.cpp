@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -46,7 +46,8 @@
 #include "ConfGroup.h"
 #include "Deleter.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -79,7 +80,7 @@ bool ConfGroup::convert(const std::string& enc, ConvertableList::iterator begin,
    const ConfList::const_iterator itrEnd(confs.end());
    for (ConfList::const_iterator itr(confs.begin()); itrEnd != itr; ++itr) {
       ConvertableList::iterator b(begin);
-      for (ConvertableList::iterator e(b); ; ++e) {
+      for (ConvertableList::iterator e(b); end != b; ++e) {
          if ((end == e) || (*e)->isConverted()) {
             if (b == e) { // skip
                ++b;
@@ -115,3 +116,5 @@ std::string ConfGroup::getSilStr() const
    }
    return DEFAULT_SIL_STR;
 }
+
+};  // namespace sinsy

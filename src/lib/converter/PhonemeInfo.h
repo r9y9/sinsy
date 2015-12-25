@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -77,6 +77,9 @@ public:
 
    //! get phoneme
    const std::string& getPhoneme() const;
+
+   //! set phoneme
+   void setPhoneme(const std::string& p);
 
    ScoreFlag getScoreFlag() const;
 

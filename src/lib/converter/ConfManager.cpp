@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -49,7 +49,8 @@
 #include "util_converter.h"
 #include "JConf.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -131,32 +132,36 @@ bool ConfManager::setLanguages(const std::string& languages, const std::string& 
          eJConf = new JConf(EUC_JP_STRS);
 
          // utf-8
-         if (uJConf->read(TABLE_UTF_8, CONF_UTF_8, MACRON_TABLE)) {
-            addJConf(uJConf);
-            deleteList.push_back(uJConf);
-         } else {
-            WARN_MSG("Cannot read Japanese table or config or macron file : " << TABLE_UTF_8 << ", " << CONF_UTF_8);
+         if (!uJConf->read(TABLE_UTF_8, CONF_UTF_8, MACRON_TABLE)) {
+            ERR_MSG("Cannot read Japanese table or config or macron file : " << TABLE_UTF_8 << ", " << CONF_UTF_8);
             delete uJConf;
             uJConf = NULL;
+            return false;
          }
+         addJConf(uJConf);
+         deleteList.push_back(uJConf);
+
+
          // shift_jis
-         if (sJConf->read(TABLE_SHIFT_JIS, CONF_SHIFT_JIS, MACRON_TABLE)) {
-            addJConf(sJConf);
-            deleteList.push_back(sJConf);
-         } else {
-            WARN_MSG("Cannot read Japanese table or config or macron file :" << TABLE_SHIFT_JIS << ", " << CONF_SHIFT_JIS);
+         if (!sJConf->read(TABLE_SHIFT_JIS, CONF_SHIFT_JIS, MACRON_TABLE)) {
+            ERR_MSG("Cannot read Japanese table or config or macron file :" << TABLE_SHIFT_JIS << ", " << CONF_SHIFT_JIS);
             delete sJConf;
             sJConf = NULL;
+            return false;
          }
+         addJConf(sJConf);
+         deleteList.push_back(sJConf);
+
          // euc-jp
-         if (eJConf->read(TABLE_EUC_JP, CONF_EUC_JP, MACRON_TABLE)) {
-            addJConf(eJConf);
-            deleteList.push_back(eJConf);
-         } else {
-            WARN_MSG("Cannot read Japanese table or config or macron file : " << TABLE_EUC_JP << ", " << CONF_EUC_JP);
+         if (!eJConf->read(TABLE_EUC_JP, CONF_EUC_JP, MACRON_TABLE)) {
+            ERR_MSG("Cannot read Japanese table or config or macron file : " << TABLE_EUC_JP << ", " << CONF_EUC_JP);
             delete eJConf;
             eJConf = NULL;
+            return false;
          }
+         addJConf(eJConf);
+         deleteList.push_back(eJConf);
+
          break;
       }
       default :
@@ -182,3 +187,5 @@ void ConfManager::setDefaultConfs(ConfGroup& confs) const
 
    return;
 }
+
+};  // namespace sinsy

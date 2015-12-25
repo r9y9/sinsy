@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -41,7 +41,8 @@
 
 #include "ScorePosition.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -116,7 +117,9 @@ size_t ScorePosition::getDenominator() const
 /*!
  to stream
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const ScorePosition& position)
+std::ostream& operator<<(std::ostream& os, const ScorePosition& position)
 {
    return os << position.getMeasure() << " : " << position.getNumerator() << "/" << position.getDenominator();
 }
+
+};  // namespace sinsy

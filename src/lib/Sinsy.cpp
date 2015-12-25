@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -58,7 +58,8 @@
 #include "ScoreDoctor.h"
 #include "util_score.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -389,7 +390,8 @@ void SynthCondition::unsetWaveformBuffer()
    this->impl->unsetWaveformBuffer();
 }
 
-class sinsy::SinsyImpl : public IScoreWriter
+
+class SinsyImpl : public IScoreWriter
 {
 public:
    //! constructor
@@ -523,7 +525,7 @@ public:
       xmlWriter << score;
 
       OutputFile outputFile(xml);
-      if(!outputFile.isValid()) {
+      if (!outputFile.isValid()) {
          ERR_MSG("Cannot open Xml file");
          return false;
       }
@@ -1011,3 +1013,5 @@ bool Sinsy::saveScoreToMusicXML(const std::string& xml, ClefType clefType)
    }
    return true;
 }
+
+};  // namespace sinsy

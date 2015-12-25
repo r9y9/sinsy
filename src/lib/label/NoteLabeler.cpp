@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -52,7 +52,8 @@
 #include "LabelMeasure.h"
 #include "ScorePosition.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -215,6 +216,13 @@ void NoteLabeler::addInfo(const std::vector<PhonemeInfo>& phonemes, const std::s
    if (phrase) {
       phrase->addSyllableNum(1);
    }
+   if (language.empty() && !this->isRest()) {
+      if (NULL == measure) {
+         WARN_MSG("Lyric in unknown language : " << getLyric());
+      } else {
+         WARN_MSG("Lyric in unknown language : " << getLyric() << " in measure " << (measure->getIndex() + 1) << "");
+      }
+   }
 }
 
 /*!
@@ -309,9 +317,9 @@ void NoteLabeler::setLabel(INoteLabel& label) const
       for (DataList::const_iterator itr(dataList.begin()); itrEnd != itr; ++itr) {
          size_t dur((*itr)->getNote().getDuration());
          d += dur;
-         t += (*itr)->getTempo() * dur;
+         t += static_cast<double>(dur) / (*itr)->getTempo();
       }
-      label.setTempo(t / d);
+      label.setTempo(static_cast<double>(d) / t);
    }
 
    label.setSyllableNum(children.size());
@@ -868,3 +876,5 @@ void NoteLabeler::PositionAdder::operator()(NoteData* data)
 {
    position.add(data->getNote().getDuration(), data->getTempo());
 }
+
+};  // namespace sinsy

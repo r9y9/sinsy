@@ -85,6 +85,8 @@ libSinsy_a_SOURCES = Sinsy.cpp \
                      ./util/Configurations.cpp \
                      ./util/Configurations.h \
                      ./util/Deleter.h \
+                     ./util/DiphthongConverter.cpp \
+                     ./util/DiphthongConverter.h \
                      ./util/ForEachAdapter.h \
                      ./util/IReadableStream.h \
                      ./util/IStringable.cpp \

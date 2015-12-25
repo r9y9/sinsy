@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -60,7 +60,8 @@
 #include "util_score.h"
 #include "Converter.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 const XmlWriter::Clef XmlWriter::CLEF_DEFAULT = 0;
 const XmlWriter::Clef XmlWriter::CLEF_G = 1;
@@ -450,6 +451,7 @@ void XmlWriter::setNoteTag(const Note& note)
    XmlData* noteTag = new XmlData(TAG_NOTE);
    XmlData* notationsTag = NULL;
    XmlData* articulationsTag = NULL;
+   XmlData* technicalTag = NULL;
 
    if (note.isRest()) {
       noteTag->addChild(new XmlData(TAG_REST)); // rest
@@ -528,18 +530,18 @@ void XmlWriter::setNoteTag(const Note& note)
       }
    }
 
-   // breath mark
+   // breath
    if (note.hasBreathMark()) {
       if (NULL == notationsTag) {
          notationsTag = new XmlData(TAG_NOTATIONS);
          noteTag->addChild(notationsTag);
       }
-      if (NULL == articulationsTag) {
-         articulationsTag = new XmlData(TAG_ARTICULATIONS);
-         notationsTag->addChild(articulationsTag);
+      if (NULL == technicalTag) {
+         technicalTag = new XmlData(TAG_TECHNICAL);
+         notationsTag->addChild(technicalTag);
       }
-      XmlData* breathMarkTag = new XmlData(TAG_BREATH_MARK);
-      articulationsTag->addChild(breathMarkTag);
+      XmlData* upBowTag = new XmlData(TAG_UP_BOW);
+      technicalTag->addChild(upBowTag);
    }
 
    // accent
@@ -726,3 +728,5 @@ bool XmlWriter::writeXml(WritableStrStream& stream) const
    return true;
 }
 
+
+};  // namespace sinsy

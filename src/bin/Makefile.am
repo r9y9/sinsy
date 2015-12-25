@@ -1,6 +1,5 @@
 
-AM_CPPFLAGS = -I @top_srcdir@/include \
-              -I @HTS_ENGINE_HEADER_DIR@
+AM_CPPFLAGS = -I @top_srcdir@/include
 
 bin_PROGRAMS = sinsy 
 

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -72,6 +72,14 @@ public:
 
    //! stream is valid or not
    bool isValid() const;
+
+   //! stream is end of file
+   inline bool isEof() const {
+      return stream.eof();
+   }
+
+   //! read a line
+   bool readLine(std::string& line);
 
 private:
    //! copy constructor (donot use)

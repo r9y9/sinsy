@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -42,7 +42,9 @@
 #include "util_log.h"
 #include "LabelData.h"
 
-using namespace sinsy;
+namespace sinsy
+{
+const INT64 LabelData::INVALID_TIME = -1;
 
 namespace
 {
@@ -80,7 +82,7 @@ const char* SEPARATOR_J[NUM_J] = {"/J:", "~", "@"};
 /*!
  constructor
  */
-LabelData::LabelData() : monophoneFlag(false), outputTimeFlag(true), beginTime(-1), endTime(-1)
+LabelData::LabelData() : monophoneFlag(false), outputTimeFlag(true), beginTime(INVALID_TIME), endTime(INVALID_TIME)
 {
    List *p(NULL), *a(NULL), *b(NULL), *c(NULL), *d(NULL), *e(NULL), *f(NULL), *g(NULL), *h(NULL), *i(NULL), *j(NULL);
 
@@ -213,7 +215,7 @@ void LabelData::set<bool>(char category, size_t number, const bool& value)
 /*!
  to stream
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const LabelData& obj)
+std::ostream& operator<<(std::ostream& os, const LabelData& obj)
 {
    if (obj.outputTimeFlag) {
       os << obj.beginTime << " " << obj.endTime << " ";
@@ -326,3 +328,5 @@ std::ostream& sinsy::operator<<(std::ostream& os, const LabelData& obj)
 
    return os;
 }
+
+};  // namespace sinsy

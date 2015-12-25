@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -44,7 +44,8 @@
 #include <stdexcept>
 #include "SynthConditionImpl.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -107,3 +108,6 @@ void SynthConditionImpl::unsetWaveformBuffer()
 {
    this->waveformBuffer = NULL;
 }
+
+
+};  // namespace sinsy

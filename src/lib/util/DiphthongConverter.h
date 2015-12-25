@@ -39,29 +39,49 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
-#ifndef SINSY_UTIL_SCORE_H_
-#define SINSY_UTIL_SCORE_H_
+#ifndef SINSY_DIPHTHONG_CONVERTER_H_
+#define SINSY_DIPHTHONG_CONVERTER_H_
 
-#include <cstddef>
+#include <map>
+#include <vector>
+#include <string>
 
 namespace sinsy
 {
-class IScoreWriter;
-class IScoreWritable;
-class Beat;
 
-const size_t BASE_DIVISIONS = 960;
-const double DEFAULT_TEMPO = 100.0;
+class DiphthongConverter
+{
+public :
 
-//! get measure duration
-size_t getMeasureDuration(const Beat& beat);
+   //! constructor
+   DiphthongConverter();
 
-//! write score
-IScoreWritable& operator<<(IScoreWritable& writable, const IScoreWriter& writer);
+   //! destructor
+   virtual ~DiphthongConverter();
 
-//! write score
-const IScoreWriter& operator>>(const IScoreWriter& writer, IScoreWritable& writable);
+   //! clear
+   void clear();
+
+   //! insert conversion rule
+   bool insert(const std::string& diphthong, const std::string& front, const std::string& back);
+
+   //! get front of converted phonemes
+   std::string getFront(const std::string& diphthong) const;
+
+   //! get back of converted phonemes
+   std::string getBack(const std::string& diphthong) const;
+
+private :
+   //! copy constructor (donot use)
+   DiphthongConverter(const DiphthongConverter&);
+
+   //! assignment operator (donot use)
+   DiphthongConverter& operator=(const DiphthongConverter&);
+
+   typedef std::map<std::string, std::pair<std::string, std::string> > ConvMap;
+   ConvMap convMap;
+};
 
 };
 
-#endif // SINSY_UTIL_SCORE_H_
+#endif // SINSY_DIPHTHONG_CONVERTER_H_

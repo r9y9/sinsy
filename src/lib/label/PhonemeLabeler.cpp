@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -43,7 +43,8 @@
 #include "util_log.h"
 #include <stdexcept>
 
-using namespace sinsy;
+namespace sinsy
+{
 
 const std::string PhonemeLabeler::BREATH_PHONEME = "br"; //!< breath
 
@@ -138,3 +139,4 @@ void PhonemeLabeler::setCountToNextVowel(size_t count)
    this->countToNextVowel = count;
 }
 
+};  // namespace sinsy

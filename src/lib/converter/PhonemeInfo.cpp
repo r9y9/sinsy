@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -42,7 +42,8 @@
 #include "util_log.h"
 #include "PhonemeInfo.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 const std::string PhonemeInfo::TYPE_SILENT    = "s";
 const std::string PhonemeInfo::TYPE_PAUSE     = "p";
@@ -106,9 +107,19 @@ const std::string& PhonemeInfo::getPhoneme() const
 }
 
 /*!
+ set phoneme
+ */
+void PhonemeInfo::setPhoneme(const std::string& p)
+{
+   this->phoneme = p;
+}
+
+/*!
  return score flag
  */
 ScoreFlag PhonemeInfo::getScoreFlag() const
 {
    return this->scoreFlag;
 }
+
+};  // namespace sinsy

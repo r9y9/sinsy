@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -51,7 +51,8 @@
 #include "JConf.h"
 #include "Deleter.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -200,6 +201,17 @@ public:
          return NULL;
       }
       return ptrList.back();
+   }
+
+   //! cancel vowel reduction of last syllable
+   void cancelVowelReductionOfLastSyllable() {
+      if (ptrList.empty()) {
+         return;
+      }
+      if (waiting) { // previous syllable has vowel reduction
+         waiting = false;
+         vowelReductionIdx = INVALID_IDX;
+      }
    }
 
 private:
@@ -505,7 +517,7 @@ bool JConf::convert(const std::string& enc, ConvertableList::iterator begin, Con
             lyric.erase(0, vowelReductionSymbol.size());
          } else if (0 == lyric.compare(0, macronSymbol.size(), macronSymbol)) { // macron
             if (NULL != infoAdder->getLastPhonemes()) {
-               // do nothing
+               infoAdder->cancelVowelReductionOfLastSyllable();
             } else if (infoAdderList.empty()) {
                WARN_MSG("Macron have to follow another lyric");
             } else {
@@ -588,3 +600,5 @@ const MultibyteCharRange& JConf::getMultibyteCharRange() const
 {
    return multibyteCharRange;
 }
+
+};  // namespace sinsy

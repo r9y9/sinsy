@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -58,7 +58,8 @@
 #include "xml_tags.h"
 #include "util_score.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -688,3 +689,5 @@ const XmlData* XmlReader::getXmlData() const
 {
    return this->xmlData;
 }
+
+};  // namespace sinsy

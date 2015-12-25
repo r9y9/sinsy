@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -43,7 +43,8 @@
 #include "ScoreDoctor.h"
 #include "util_log.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -141,3 +142,5 @@ void ScoreDoctor::addNote(const Note& n)
 
    tempList.push_back(na);
 }
+
+};  // namespace sinsy

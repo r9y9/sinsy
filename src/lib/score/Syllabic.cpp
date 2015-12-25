@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -46,7 +46,8 @@
 #include "util_log.h"
 #include "util_string.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -168,7 +169,9 @@ const std::string& Syllabic::get() const
 /*!
  to stream
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const Syllabic& syllabic)
+std::ostream& operator<<(std::ostream& os, const Syllabic& syllabic)
 {
    return os << syllabic.get();
 }
+
+};  // namespace sinsy

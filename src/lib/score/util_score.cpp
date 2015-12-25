@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -71,4 +71,4 @@ const IScoreWriter& operator>>(const IScoreWriter& writer, IScoreWritable& writa
    return writer;
 }
 
-}; // sinsy
+};  // namespace sinsy

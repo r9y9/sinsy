@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -42,12 +42,13 @@
 #include <algorithm>
 #include "util_string.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  c is blank character or not
  */
-bool sinsy::isBlank(char c)
+bool isBlank(char c)
 {
    size_t idx(BLANK_STR.find(c));
    if (std::string::npos == idx) {
@@ -59,7 +60,7 @@ bool sinsy::isBlank(char c)
 /*!
  cut left and right blanks
  */
-std::string& sinsy::cutBlanks(std::string& str)
+std::string& cutBlanks(std::string& str)
 {
    size_t start(str.find_first_not_of(BLANK_STR));
    if (std::string::npos == start) {
@@ -78,7 +79,7 @@ std::string& sinsy::cutBlanks(std::string& str)
 /*!
  find first blank character
  */
-size_t sinsy::findFirstOfBlank(const std::string& str)
+size_t findFirstOfBlank(const std::string& str)
 {
    return str.find_first_of(BLANK_STR);
 }
@@ -86,7 +87,7 @@ size_t sinsy::findFirstOfBlank(const std::string& str)
 /*!
  find first not blank character
  */
-size_t sinsy::findFirstNotOfBlank(const std::string& str, size_t index)
+size_t findFirstNotOfBlank(const std::string& str, size_t index)
 {
    return str.find_first_not_of(BLANK_STR, index);
 }
@@ -94,7 +95,7 @@ size_t sinsy::findFirstNotOfBlank(const std::string& str, size_t index)
 /*!
  convert str to lower-case
  */
-void sinsy::toLower(std::string& str)
+void toLower(std::string& str)
 {
    std::transform(str.begin(), str.end(), str.begin(), tolower);
 }
@@ -102,7 +103,9 @@ void sinsy::toLower(std::string& str)
 /*!
  convert str to lower-case
  */
-void sinsy::toUpper(std::string& str)
+void toUpper(std::string& str)
 {
    std::transform(str.begin(), str.end(), str.begin(), toupper);
 }
+
+};  // namespace sinsy

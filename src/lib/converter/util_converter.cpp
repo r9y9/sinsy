@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -46,7 +46,8 @@
 #include "MultibyteCharRange.h"
 #include <iomanip>
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -90,7 +91,7 @@ ScoreFlag matchScoreFlag(char c)
 /*!
  analyze score flags
  */
-ScoreFlag sinsy::analyzeScoreFlags(std::string& str, const MultibyteCharRange* charRange)
+ScoreFlag analyzeScoreFlags(std::string& str, const MultibyteCharRange* charRange)
 {
    ScoreFlag ret(0x00);
 
@@ -111,33 +112,49 @@ ScoreFlag sinsy::analyzeScoreFlags(std::string& str, const MultibyteCharRange* c
    return ret;
 }
 
-bool sinsy::isEnableFlag(ScoreFlag flag)
+std::string restoreScoreFlag(ScoreFlag flag)
+{
+   if (0 == flag) {
+      return std::string();
+   }
+   std::ostringstream oss;
+   for (size_t i(0); i < SCORE_FLAG_NUM; ++i) {
+      if (SCORE_FLAGS[i] & flag) {
+         oss << SCORE_FLAG_CHARS[i];
+      }
+   }
+   return oss.str();
+}
+
+bool isEnableFlag(ScoreFlag flag)
 {
    return (0x00 == (SCORE_FLAG_DISABLE & flag));
 }
 
-std::string sinsy::getScoreFlagStr(ScoreFlag flag)
+std::string getScoreFlagStr(ScoreFlag flag)
 {
    std::ostringstream oss;
    oss << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(flag);
    return oss.str();
 }
 
-ScoreFlag& sinsy::setDisableFlag(ScoreFlag& flag)
+ScoreFlag& setDisableFlag(ScoreFlag& flag)
 {
    flag |= SCORE_FLAG_DISABLE;
    return flag;
 }
 
-ScoreFlag& sinsy::unsetDisableFlag(ScoreFlag& flag)
+ScoreFlag& unsetDisableFlag(ScoreFlag& flag)
 {
    flag &= ~SCORE_FLAG_DISABLE;
    return flag;
 }
 
-ScoreFlag& sinsy::setFalsettoFlag(ScoreFlag& flag)
+ScoreFlag& setFalsettoFlag(ScoreFlag& flag)
 {
    flag |= SCORE_FLAG_FALSETTO;
    return flag;
 }
 
+
+};  // namespace sinsy

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -46,7 +46,8 @@
 #include "util_string.h"
 #include "util_log.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 const Pitch::Step Pitch::C = 0;
 const Pitch::Step Pitch::Db = 1;
@@ -263,7 +264,7 @@ Pitch& Pitch::operator--()
 /*!
  addition
  */
-Pitch sinsy::operator+(const Pitch& pitch, int i)
+Pitch operator+(const Pitch& pitch, int i)
 {
    Pitch ret(pitch);
    return ret += i;
@@ -272,7 +273,7 @@ Pitch sinsy::operator+(const Pitch& pitch, int i)
 /*!
  subtraction
  */
-Pitch sinsy::operator-(const Pitch& pitch, int i)
+Pitch operator-(const Pitch& pitch, int i)
 {
    return pitch + (-i);
 }
@@ -280,7 +281,7 @@ Pitch sinsy::operator-(const Pitch& pitch, int i)
 /*!
  increment
  */
-Pitch sinsy::operator++(const Pitch& pitch)
+Pitch operator++(const Pitch& pitch)
 {
    Pitch ret(pitch);
    return pitch + 1;
@@ -289,7 +290,7 @@ Pitch sinsy::operator++(const Pitch& pitch)
 /*!
  decrement
  */
-Pitch sinsy::operator--(const Pitch& pitch)
+Pitch operator--(const Pitch& pitch)
 {
    Pitch ret(pitch);
    return pitch - 1;
@@ -299,7 +300,9 @@ Pitch sinsy::operator--(const Pitch& pitch)
 /*!
  to stream
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const Pitch& pitch)
+std::ostream& operator<<(std::ostream& os, const Pitch& pitch)
 {
    return os << pitch.getStepStr() << pitch.getOctave();
 }
+
+};  // namespace sinsy

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -45,7 +45,8 @@
 #include "util_log.h"
 #include "util_string.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -166,12 +167,13 @@ void XmlData::setData(const std::string& str)
 /*!
  add child
  */
-void XmlData::addChild(XmlData* child)
+XmlData::Children::iterator XmlData::addChild(XmlData* child)
 {
    if (NULL == child) {
       std::runtime_error("XmlData::addChild() NULL pointer");
    }
    children.push_back(child);
+   return children.end() - 1;
 }
 
 //! erase child
@@ -260,3 +262,5 @@ XmlData::Children::iterator XmlData::childEnd()
 {
    return children.end();
 }
+
+};  // namespace sinsy

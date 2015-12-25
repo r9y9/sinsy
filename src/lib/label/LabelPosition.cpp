@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -44,7 +44,8 @@
 #include "util_log.h"
 #include "util_score.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -80,10 +81,12 @@ LabelPosition::~LabelPosition()
  */
 LabelPosition& LabelPosition::operator=(const LabelPosition & obj)
 {
-   count = obj.count;
-   time = obj.time;
-   point = obj.point;
-   duration = obj.duration;
+   if (&obj != this) {
+      count = obj.count;
+      time = obj.time;
+      point = obj.point;
+      duration = obj.duration;
+   }
    return *this;
 }
 
@@ -188,8 +191,10 @@ sinsy::INT64 LabelPosition::getDuration() const
 /*!
  to stream
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const LabelPosition& obj)
+std::ostream& operator<<(std::ostream& os, const LabelPosition& obj)
 {
    os << "count:" << obj.getCount() << ", time:" << obj.getTime() << ", point:" << obj.getPoint() << ", duration:" << obj.getDuration();
    return os;
 }
+
+};  // namespace sinsy

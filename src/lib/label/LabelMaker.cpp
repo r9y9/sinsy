@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -56,12 +56,12 @@
 #include "ScorePosition.h"
 #include "util_score.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
 const std::string DEFAULT_ENCODING = "utf-8";
-const size_t DEFAULT_TEMPO = 100;
 
 class Copier
 {
@@ -1102,7 +1102,9 @@ void LabelMaker::addNote(const Note& note)
                throw std::runtime_error("LabelMaker::addNote() duration is larger than max of int");
             }
          }
+         size_t measureIndex(measureList.size() + stockMeasures.size());
          stockMeasures.push_back(new LabelMeasure(this->beat));
+         stockMeasures.back()->setIndex(measureIndex);
          if ((0 == residualMeasureDuration && !inTie)) {
             applyStocks();
          }
@@ -1777,3 +1779,5 @@ void LabelMaker::applyStocks()
    *this << tempScore;
    tempScore.clear();
 }
+
+};  // namespace sinsy

@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -44,7 +44,8 @@
 #include "StringTokenizer.h"
 #include "MultibyteCharRange.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -106,3 +107,5 @@ size_t MultibyteCharRange::getCharSize(unsigned char firstChar) const
 
    return 1;
 }
+
+};  // namespace sinsy

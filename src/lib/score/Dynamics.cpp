@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -45,7 +45,8 @@
 #include "util_log.h"
 #include "util_string.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -204,7 +205,9 @@ const std::string& Dynamics::getTagStr() const
 /*!
  to string
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const Dynamics& dynamics)
+std::ostream& operator<<(std::ostream& os, const Dynamics& dynamics)
 {
    return os << dynamics.getStr();
 }
+
+};  // namespace sinsy

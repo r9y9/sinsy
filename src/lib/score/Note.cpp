@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -41,7 +41,8 @@
 
 #include "Note.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 /*!
  constructor
@@ -279,7 +280,7 @@ bool Note::isSlurStop() const
 /*!
  to stream
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const Note& note)
+std::ostream& operator<<(std::ostream& os, const Note& note)
 {
    if (note.isRest()) {
       os << "[rest(" << note.getDuration() << ") " << note.getLyric();
@@ -306,3 +307,5 @@ std::ostream& sinsy::operator<<(std::ostream& os, const Note& note)
    os << "]";
    return os;
 }
+
+};  // namespace sinsy

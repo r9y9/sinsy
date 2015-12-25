@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -42,7 +42,8 @@
 #include <stdexcept>
 #include "Beat.h"
 
-using namespace sinsy;
+namespace sinsy
+{
 
 namespace
 {
@@ -130,7 +131,9 @@ void Beat::setBeatType(size_t b)
 /*!
  to string
  */
-std::ostream& sinsy::operator<<(std::ostream& os, const Beat& beat)
+std::ostream& operator<<(std::ostream& os, const Beat& beat)
 {
    return os << beat.getBeats() << "/" << beat.getBeatType();
 }
+
+};  // namespace sinsy

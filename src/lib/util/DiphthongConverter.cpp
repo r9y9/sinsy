@@ -39,29 +39,65 @@
 /* POSSIBILITY OF SUCH DAMAGE.                                       */
 /* ----------------------------------------------------------------- */
 
-#ifndef SINSY_UTIL_SCORE_H_
-#define SINSY_UTIL_SCORE_H_
-
-#include <cstddef>
+#include <fstream>
+#include "DiphthongConverter.h"
+#include "util_log.h"
 
 namespace sinsy
 {
-class IScoreWriter;
-class IScoreWritable;
-class Beat;
 
-const size_t BASE_DIVISIONS = 960;
-const double DEFAULT_TEMPO = 100.0;
+/*!
+ constructor
+ */
+DiphthongConverter::DiphthongConverter()
+{
+}
 
-//! get measure duration
-size_t getMeasureDuration(const Beat& beat);
+/*!
+ destructor
+ */
+DiphthongConverter::~DiphthongConverter()
+{
+}
 
-//! write score
-IScoreWritable& operator<<(IScoreWritable& writable, const IScoreWriter& writer);
+/*!
+ clear
+ */
+void DiphthongConverter::clear()
+{
+   convMap.clear();
+}
 
-//! write score
-const IScoreWriter& operator>>(const IScoreWriter& writer, IScoreWritable& writable);
+/*!
+ insert diphthong conversion rule
+ */
+bool DiphthongConverter::insert(const std::string& diphthong, const std::string& front, const std::string& back)
+{
+   return convMap.insert(std::make_pair(diphthong, std::make_pair(front, back))).second;
+}
 
-};
+/*!
+ get front of converted phonemes
+ */
+std::string DiphthongConverter::getFront(const std::string& diphthong) const
+{
+   ConvMap::const_iterator itr(convMap.find(diphthong));
+   if (convMap.end() == itr) {
+      return diphthong;
+   }
+   return itr->second.first;
+}
 
-#endif // SINSY_UTIL_SCORE_H_
+/*!
+ get back of converted phonemes
+ */
+std::string DiphthongConverter::getBack(const std::string& diphthong) const
+{
+   ConvMap::const_iterator itr(convMap.find(diphthong));
+   if (convMap.end() == itr) {
+      return diphthong;
+   }
+   return itr->second.second;
+}
+
+};  // namespace sinsy

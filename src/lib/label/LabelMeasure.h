@@ -4,7 +4,7 @@
 /*           http://sinsy.sourceforge.net/                           */
 /* ----------------------------------------------------------------- */
 /*                                                                   */
-/*  Copyright (c) 2009-2014  Nagoya Institute of Technology          */
+/*  Copyright (c) 2009-2015  Nagoya Institute of Technology          */
 /*                           Department of Computer Science          */
 /*                                                                   */
 /* All rights reserved.                                              */
@@ -73,6 +73,12 @@ public:
    //! get duration
    const INT64 getDuration() const;
 
+   //! set measure index
+   void setIndex(size_t i);
+
+   //! get measure index
+   size_t getIndex() const;
+
 private:
    //! copy constructor (donot use)
    LabelMeasure(const LabelMeasure&);
@@ -88,6 +94,9 @@ private:
 
    //! max position
    LabelPosition maxPosition;
+
+   //! measure index
+   size_t index;
 };
 
 };
