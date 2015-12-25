@@ -1,3 +1,8 @@
+Version 0.92:
+* change breath_mark tag to up_bow tag when score is saved.
+* ignore vowel reduction flag before macron.
+* fix many bugs.
+
 Version 0.91:
  * add clef type selector to XML save function.
  * integrate chained vowels to one vowel.
