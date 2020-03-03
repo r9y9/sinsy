@@ -136,7 +136,7 @@ bool MacronTable::read(const std::string& fname)
       extractPhonemeList(st.at(1), result->forward);
       extractPhonemeList(st.at(2), result->backward);
 
-      if (false == convertTable.insert(std::make_pair<std::vector<std::string>, Result*>(pl, result)).second) {
+      if (false == convertTable.insert(std::make_pair(pl, result)).second) {
          ERR_MSG("Wrong macron table (There is a duplication : " << st.at(0) << ") : " << fname);
          delete result;
          return false;

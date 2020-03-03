@@ -129,7 +129,7 @@ bool Configurations::read(const std::string& fpath)
             }
          }
       }
-      configs.insert(std::make_pair<std::string, std::string>(key, value));
+      configs.insert(std::make_pair(key, value));
    }
    return true;
 }

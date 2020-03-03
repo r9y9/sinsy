@@ -180,7 +180,7 @@ bool PhonemeTable::read(const std::string& fname)
       for (size_t i(1); i < sz; ++i) {
          pl->push_back(st.at(i));
       }
-      if (false == convertTable.insert(std::make_pair<std::string, PhonemeList*>(st.at(0), pl)).second) {
+      if (false == convertTable.insert(std::make_pair(st.at(0), pl)).second) {
          ERR_MSG("Wrong phoneme table (some syllables have same name : " << st.at(0) << ") : " << fname);
          delete pl;
          return false;
