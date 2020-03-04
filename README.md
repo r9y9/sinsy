@@ -1,6 +1,6 @@
 # Sinsy
 
-A folk of sinsy: http://sinsy.sourceforge.net/
+A fork of sinsy: http://sinsy.sourceforge.net/
 
 ## Why?
 
