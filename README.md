@@ -1,5 +1,7 @@
 # Sinsy
 
+![C/C++ CI](https://github.com/r9y9/sinsy/workflows/C/C++%20CI/badge.svg)
+
 A folk of sinsy: http://sinsy.sourceforge.net/
 
 ## Why?
@@ -19,6 +21,8 @@ See [src/README](src/README) for the original README.
 ## Changes
 
 - Fixes for recent C++ compilers
+- CMake support
+- CI using Github actions
 
 ## References
 
