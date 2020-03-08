@@ -47,6 +47,8 @@
 #include <string>
 #include <vector>
 
+#include "LabelStrings.h"
+
 namespace sinsy
 {
 typedef size_t SuddenDynamicsType;
@@ -220,6 +222,8 @@ public:
 
    //! set interpolation weight for synthesis
    bool setInterpolationWeight(size_t index, double weight);
+
+   LabelStrings* createLabelData();
 
    //! synthesize
    bool synthesize(SynthCondition& consition);

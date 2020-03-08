@@ -36,6 +36,7 @@ aux_source_directory(lib/xml xml_source)
 
 include_directories(sinsy
   include
+  include/sinsy
   lib
   lib/converter
   lib/hts_engine_API
@@ -69,6 +70,6 @@ target_link_libraries(sinsy-bin  ${HTS_ENGINE_LIB})
 set_target_properties(sinsy-bin PROPERTIES OUTPUT_NAME sinsy)
 
 install(TARGETS sinsy sinsy-bin DESTINATION lib RUNTIME DESTINATION bin)
-install(FILES include/sinsy.h DESTINATION include)
+install(DIRECTORY include/sinsy DESTINATION include)
 install(DIRECTORY dic DESTINATION lib/sinsy PATTERN "dic/Makefile*" EXCLUDE)
 install(FILES "${PROJECT_BINARY_DIR}/sinsy.pc" DESTINATION lib/pkgconfig/)
