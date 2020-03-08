@@ -480,6 +480,16 @@ public:
       return engine.setInterpolationWeight(index, weight);
    }
 
+   LabelStrings* createLabelData() {
+      LabelMaker labelMaker(converter);
+      labelMaker << score;
+      labelMaker.fix();
+      LabelStrings *label = new LabelStrings;
+      labelMaker.outputLabel(*label, false, 1, 2);
+
+      return label;
+   }
+
    //! synthesize
    bool synthesize(SynthConditionImpl& condition) {
       LabelMaker labelMaker(converter);
@@ -898,6 +908,10 @@ bool Sinsy::setVolume(double volume)
 bool Sinsy::setInterpolationWeight(size_t index, double weight)
 {
    return impl->setInterpolationWeight(index, weight);
+}
+
+LabelStrings* Sinsy::createLabelData() {
+   return impl->createLabelData();
 }
 
 /*!
