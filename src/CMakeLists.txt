@@ -70,6 +70,5 @@ set_target_properties(sinsy-bin PROPERTIES OUTPUT_NAME sinsy)
 
 install(TARGETS sinsy sinsy-bin DESTINATION lib RUNTIME DESTINATION bin)
 install(FILES include/sinsy.h DESTINATION include)
-# install(DIRECTORY src/world DESTINATION inclu de PATTERN "*.in" EXCLUDE)
-#install(DIRECTORY "${PROJECT_BINARY_DIR}/world" DESTINATION include)
+install(DIRECTORY dic DESTINATION lib/sinsy PATTERN "dic/Makefile*" EXCLUDE)
 install(FILES "${PROJECT_BINARY_DIR}/sinsy.pc" DESTINATION lib/pkgconfig/)
