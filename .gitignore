@@ -6,6 +6,7 @@ config
 config.status
 configure
 src/autom4te.cache/*
+src/build
 
 # Created by https://www.gitignore.io/api/c,vim,c++,linux,macos,cmake,emacs,windows,autotools,visualstudio
 # Edit at https://www.gitignore.io/?templates=c,vim,c++,linux,macos,cmake,emacs,windows,autotools,visualstudio
