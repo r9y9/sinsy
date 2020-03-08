@@ -1,0 +1,23 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-ubuntu:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: install hts_engine_API
+      run: |
+        git clone https://github.com/r9y9/hts_engine_API
+        cd hts_engine_API/src && ./waf configure build && sudo ./waf install
+    - name: configure
+      run: cd src && mkdir build && cd build && cmake ..
+    - name: build
+      run:  cd src/build && make -j
