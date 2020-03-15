@@ -223,7 +223,7 @@ public:
    //! set interpolation weight for synthesis
    bool setInterpolationWeight(size_t index, double weight);
 
-   LabelStrings* createLabelData();
+   LabelStrings* createLabelData(bool monophoneFlag, int overwriteEnableFlag, int timeFlag);
 
    //! synthesize
    bool synthesize(SynthCondition& consition);
