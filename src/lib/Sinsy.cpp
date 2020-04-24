@@ -480,6 +480,16 @@ public:
       return engine.setInterpolationWeight(index, weight);
    }
 
+   LabelStrings* createLabelData(bool monophoneFlag, int overwriteEnableFlag, int timeFlag) {
+      LabelMaker labelMaker(converter);
+      labelMaker << score;
+      labelMaker.fix();
+      LabelStrings *label = new LabelStrings;
+      labelMaker.outputLabel(*label, monophoneFlag, overwriteEnableFlag, timeFlag);
+
+      return label;
+   }
+
    //! synthesize
    bool synthesize(SynthConditionImpl& condition) {
       LabelMaker labelMaker(converter);
@@ -898,6 +908,10 @@ bool Sinsy::setVolume(double volume)
 bool Sinsy::setInterpolationWeight(size_t index, double weight)
 {
    return impl->setInterpolationWeight(index, weight);
+}
+
+LabelStrings* Sinsy::createLabelData(bool monophoneFlag, int overwriteEnableFlag, int timeFlag) {
+   return impl->createLabelData(monophoneFlag, overwriteEnableFlag, timeFlag);
 }
 
 /*!
