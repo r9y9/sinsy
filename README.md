@@ -18,6 +18,17 @@ Subsequent improvements will be done in the git repository as needed.
 
 See [src/README](src/README) for the original README.
 
+## Installation
+
+```
+cd src
+mkdir -p build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON  ..
+make -j
+sudo make install
+```
+
+
 ## Changes
 
 - Fixes for recent C++ compilers
