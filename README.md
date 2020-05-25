@@ -18,6 +18,10 @@ Subsequent improvements will be done in the git repository as needed.
 
 See [src/README](src/README) for the original README.
 
+## Requirements
+
+- https://github.com/r9y9/hts_engine_API
+
 ## Installation
 
 ```
@@ -27,6 +31,8 @@ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON  ..
 make -j
 sudo make install
 ```
+
+See the complete setup in https://github.com/r9y9/sinsy/blob/master/.github/workflows/ccpp.yaml.
 
 
 ## Changes
