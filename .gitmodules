@@ -1,0 +1,3 @@
+[submodule "lib/hts_engine_api/hts_engine"]
+	path = src/lib/hts_engine_API/hts_engine
+	url = git@github.com:r9y9/hts_engine_API.git
