@@ -8,14 +8,24 @@ on:
 
 jobs:
   build-ubuntu:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: 'true'
     - name: configure
       run: cd src && mkdir build && cd build && cmake ..
+    - name: build
+      run:  cd src/build && make -j
+  build-windows:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+    - name: install mingw
+      run: apt update && apt install -y mingw-w64    
+    - name: configure
+      run: cd src && mkdir build && cd build && CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ cmake -DCMAKE_SYSTEM_NAME=Windows ..
     - name: build
       run:  cd src/build && make -j
