@@ -8,16 +8,24 @@ on:
 
 jobs:
   build-ubuntu:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
-    - name: install hts_engine_API
-      run: |
-        git clone https://github.com/r9y9/hts_engine_API
-        cd hts_engine_API/src && mkdir -p build && cd build && cmake .. && sudo make -j install
+      with:
+        submodules: 'true'
     - name: configure
       run: cd src && mkdir build && cd build && cmake ..
+    - name: build
+      run:  cd src/build && make -j
+  build-windows:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+    - name: install mingw
+      run: sudo apt update && sudo apt install -y mingw-w64    
+    - name: configure
+      run: cd src && mkdir build && cd build && CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ cmake -DCMAKE_SYSTEM_NAME=Windows ..
     - name: build
       run:  cd src/build && make -j
