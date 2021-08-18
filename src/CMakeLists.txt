@@ -55,8 +55,8 @@ set_target_properties(sinsy PROPERTIES
 )
 
 add_executable(sinsy-bin bin/sinsy.cpp)
-
-target_link_libraries(sinsy-bin sinsy hts_engine_API)
+target_link_libraries(sinsy hts_engine_API)
+target_link_libraries(sinsy-bin sinsy)
 if (WIN32)
 target_link_libraries(sinsy-bin -static-libgcc -static-libstdc++)
 endif()
