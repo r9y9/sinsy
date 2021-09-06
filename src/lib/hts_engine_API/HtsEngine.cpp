@@ -297,4 +297,9 @@ bool HtsEngine::setInterpolationWeight(size_t index, double weight)
    return true;
 }
 
+size_t HtsEngine::get_sampling_frequency() {
+   return HTS_Engine_get_sampling_frequency(&engine);
+}
+
+
 };  // namespace sinsy

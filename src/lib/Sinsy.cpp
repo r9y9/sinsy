@@ -548,6 +548,10 @@ public:
       return true;
    }
 
+   size_t get_sampling_frequency() {
+      return engine.get_sampling_frequency();
+   }
+
 private:
    //! copy constructor (donot use)
    SinsyImpl(const SinsyImpl&);
@@ -930,6 +934,11 @@ bool Sinsy::synthesize(SynthCondition& condition)
    return true;
 }
 
+bool Sinsy::synthesize(SynthCondition* condition)
+{
+   return synthesize(*condition);
+}
+
 /*!
  stop
  */
@@ -1026,6 +1035,10 @@ bool Sinsy::saveScoreToMusicXML(const std::string& xml, ClefType clefType)
       return false;
    }
    return true;
+}
+
+size_t Sinsy::get_sampling_frequency() {
+   return impl->get_sampling_frequency();
 }
 
 };  // namespace sinsy

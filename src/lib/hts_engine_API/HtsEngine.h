@@ -91,6 +91,8 @@ public:
    //! set interpolation weight
    bool setInterpolationWeight(size_t, double);
 
+   size_t get_sampling_frequency();
+
 private:
    //! copy constructor (donot use)
    explicit HtsEngine(const HtsEngine&);

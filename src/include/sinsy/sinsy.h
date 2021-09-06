@@ -228,6 +228,8 @@ public:
    //! synthesize
    bool synthesize(SynthCondition& consition);
 
+   bool synthesize(SynthCondition* consition);
+
    //! stop synthesizing
    bool stop();
 
@@ -242,6 +244,8 @@ public:
 
    //! save score to MusicXML
    bool saveScoreToMusicXML(const std::string& xml, ClefType clefType = CLEFTYPE_DEFAULT);
+
+   size_t get_sampling_frequency();
 
 private:
    //! copy constructor (donot use)
